@@ -11,18 +11,15 @@ conn = pymysql.connect(host='localhost',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
 
-@app.route("/", methods=['GET'])
-def hello():
-    return jsonify({'msg': 'Hello Word'})
-
-@app.route("/testget", methods=['GET'])
-def test():
+@app.route("/all-flights", methods=['GET'])
+def all_flights():
     cursor = conn.cursor()
-    query = "SELECT * FROM airline"
+    query = "SELECT * FROM flight"
     cursor.execute(query)
     data = cursor.fetchall()
     cursor.close()
-    return jsonify({'msg': 'test db data retrieval', 'data': data})
+    return jsonify({'flights': data})
+
 
 @app.route("/testpost", methods=['POST'])
 def post():
