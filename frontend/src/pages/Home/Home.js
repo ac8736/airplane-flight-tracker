@@ -1,8 +1,7 @@
-import Box from "@mui/material/Box";
 import Flight from "../../components/Flight/Flight";
 import { useState, useEffect } from "react";
 import { styles } from "./styles";
-import { Typography, Input } from "@mui/material";
+import { Typography, Input, CircularProgress, Box } from "@mui/material";
 
 export default function Home() {
   const [flights, setFlights] = useState([]);
@@ -76,7 +75,7 @@ export default function Home() {
         <Typography align="center" fontSize="3rem" fontWeight="bold">
           Flights
         </Typography>
-        <Box sx={styles.container}>{flightsList}</Box>
+        <Box sx={styles.container}>{flights.length !== 0 ? flightsList : <CircularProgress size="10rem" />}</Box>
       </Box>
     </Box>
   );
