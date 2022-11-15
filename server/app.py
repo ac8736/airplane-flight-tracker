@@ -79,6 +79,19 @@ def register_airline_staff():
     return jsonify({'status': 'Successfully registered airline staff'}), 200
 
 
+@app.route("/login-customer")
+def login_customer():
+    email = request.json["email"]
+    password = request.json["password"]
+    return jsonify({'Status': 'Successfully logged in.'}), 200
+
+@app.route("/login-airline-staff")
+def login_airline_staff():
+    username = request.json["username"]
+    password = request.json["password"]
+    return jsonify({'Status': 'Successfully logged in.'}), 200
+
+
 app.secret_key = 'sdknljdghdhdsDhd1445GKse6g6hfL7f3f8s11s33788sJS'
 if __name__ == "__main__":
     app.run("127.0.0.1", 5000, debug=True)
