@@ -5,11 +5,21 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { styles } from "./styles";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  async function logOut() {
+    try {
+      fetch("http://127.0.0.1:5000/logout");
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <AppBar position="static" sx={styles.appbar}>
@@ -22,12 +32,29 @@ export default function Navbar() {
             </Typography>
           </Box>
           <Box sx={styles.navOptions}>
-            <Button variant="text" sx={styles.button} onClick={() => navigate("/")}>
+            <Button
+              variant="text"
+              sx={styles.button}
+              onClick={() => navigate("/")}
+            >
               Home
             </Button>
-            <Button variant="text" sx={styles.button} onClick={() => navigate("/sign-in")}>
-              Sign In
-            </Button>
+            {!(
+              location.pathname === "/customer" ||
+              location.pathname === "/airline-staff"
+            ) ? (
+              <Button
+                variant="text"
+                sx={styles.button}
+                onClick={() => navigate("/sign-in")}
+              >
+                Sign In
+              </Button>
+            ) : (
+              <Button variant="text" sx={styles.button} onClick={logOut}>
+                Log out
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>

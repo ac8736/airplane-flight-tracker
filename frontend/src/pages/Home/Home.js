@@ -11,6 +11,7 @@ export default function Home() {
     departureDate: "",
     arrivalDate: "",
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getAllFlights() {
@@ -18,6 +19,7 @@ export default function Home() {
         const response = await fetch("http://127.0.0.1:5000/all-flights");
         const data = await response.json();
         setFlights(data.flights);
+        setLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -28,10 +30,18 @@ export default function Home() {
 
   const searchedFlights = flights.filter(
     (flight) =>
-      flight.departure_airport.toLowerCase().includes(search.departureAirPort.toLowerCase()) &&
-      flight.arrival_airport.toLowerCase().includes(search.arrivalAirPort.toLowerCase()) &&
-      flight.departure_date_and_time.toLowerCase().includes(search.departureDate.toLowerCase()) &&
-      flight.arrival_date_and_time.toLowerCase().includes(search.arrivalDate.toLowerCase())
+      flight.departure_airport
+        .toLowerCase()
+        .includes(search.departureAirPort.toLowerCase()) &&
+      flight.arrival_airport
+        .toLowerCase()
+        .includes(search.arrivalAirPort.toLowerCase()) &&
+      flight.departure_date_and_time
+        .toLowerCase()
+        .includes(search.departureDate.toLowerCase()) &&
+      flight.arrival_date_and_time
+        .toLowerCase()
+        .includes(search.arrivalDate.toLowerCase())
   );
   const flightsList = searchedFlights.map((flight, index) => (
     <Flight
@@ -52,22 +62,30 @@ export default function Home() {
         <Typography fontSize="3rem">Filter By</Typography>
         <Input
           placeholder="Departure Airport"
-          onChange={(e) => setSearch({ ...search, departureAirPort: e.target.value })}
+          onChange={(e) =>
+            setSearch({ ...search, departureAirPort: e.target.value })
+          }
           value={search.departureAirPort}
         />
         <Input
           placeholder="Departure Date (Ex: Sat, 05 Dec 2021 00:00:00 GMT)"
-          onChange={(e) => setSearch({ ...search, departureDate: e.target.value })}
+          onChange={(e) =>
+            setSearch({ ...search, departureDate: e.target.value })
+          }
           value={search.departureDate}
         />
         <Input
           placeholder="Arrival Airport"
-          onChange={(e) => setSearch({ ...search, arrivalAirPort: e.target.value })}
+          onChange={(e) =>
+            setSearch({ ...search, arrivalAirPort: e.target.value })
+          }
           value={search.arrivalAirPort}
         />
         <Input
           placeholder="Arrival Date (Ex: Sat, 05 Dec 2021 00:00:00 GMT)"
-          onChange={(e) => setSearch({ ...search, arrivalDate: e.target.value })}
+          onChange={(e) =>
+            setSearch({ ...search, arrivalDate: e.target.value })
+          }
           value={search.arrivalDate}
         />
       </Box>
@@ -75,7 +93,17 @@ export default function Home() {
         <Typography align="center" fontSize="3rem" fontWeight="bold">
           Flights
         </Typography>
-        <Box sx={styles.container}>{flights.length !== 0 ? flightsList : <CircularProgress size="10rem" />}</Box>
+        <Box sx={styles.container}>
+          {!loading ? (
+            flightsList.length === 0 ? (
+              <Typography>No available flights.</Typography>
+            ) : (
+              flightsList
+            )
+          ) : (
+            <CircularProgress size="10rem" />
+          )}
+        </Box>
       </Box>
     </Box>
   );

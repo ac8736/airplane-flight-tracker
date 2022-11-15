@@ -79,17 +79,38 @@ def register_airline_staff():
     return jsonify({'status': 'Successfully registered airline staff'}), 200
 
 
-@app.route("/login-customer")
+@app.route("/login-customer", methods=["GET", "POST"])
 def login_customer():
     email = request.json["email"]
     password = request.json["password"]
-    return jsonify({'Status': 'Successfully logged in.'}), 200
+    cursor = conn.cursor()
+    query = "SELECT * FROM customer WHERE email=%s"
+    cursor.execute(query, (email))
+    user = cursor.fetchone()
+    if not user or not bcrypt.checkpw(password.encode('utf8'), user['acc_password'].encode("utf8")):
+        return jsonify({'status': 'Incorrect Email or Password'}), 403
+    session['username'] = email
+    return jsonify({'status': 'Successfully logged in.'}), 200
 
 @app.route("/login-airline-staff")
 def login_airline_staff():
     username = request.json["username"]
     password = request.json["password"]
-    return jsonify({'Status': 'Successfully logged in.'}), 200
+    return jsonify({'status': 'Successfully logged in.'}), 200
+
+
+@app.route("/get-session", methods=["GET"])
+def get_session():
+    print(session['username'])
+    if 'username' not in session:
+        return jsonify({'status': 'Session not found.'}), 404
+    return jsonify({'session': session['username']}), 200
+
+
+@app.route("/logout")
+def log_out():
+    session.pop("username")
+    return jsonify({"Status": "Logged out"}), 200
 
 
 app.secret_key = 'sdknljdghdhdsDhd1445GKse6g6hfL7f3f8s11s33788sJS'

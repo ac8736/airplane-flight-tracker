@@ -4,7 +4,7 @@
 CREATE TABLE customer(
 	email	 varchar(30),
     name 	 varchar(20),
-    acc_password varchar(20),
+    acc_password varchar(100),
     building_number varchar(10),
     street 	 varchar(10),
     city	 varchar(10),
@@ -90,7 +90,7 @@ CREATE TABLE rate(
     
 CREATE TABLE airline_staff(
     username	  varchar(20),
-    acc_password	varchar(20),
+    acc_password	varchar(100),
     firstname	varchar(10),
     lastname	varchar(10),
     date_of_birth	Date,
