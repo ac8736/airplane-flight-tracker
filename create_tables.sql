@@ -9,7 +9,7 @@ CREATE TABLE customer(
     street 	 varchar(10),
     city	 varchar(10),
     state	 char(2),
-    phone_number char(10),
+    phone_number varchar(20),
     passport_number varchar(15),
     passport_expiration Date,
     passport_country varchar(20),

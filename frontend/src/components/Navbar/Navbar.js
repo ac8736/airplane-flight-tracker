@@ -12,13 +12,9 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  async function logOut() {
-    try {
-      fetch("http://127.0.0.1:5000/logout");
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
+  function logOut() {
+    localStorage.clear();
+    navigate("/");
   }
 
   return (
@@ -32,22 +28,11 @@ export default function Navbar() {
             </Typography>
           </Box>
           <Box sx={styles.navOptions}>
-            <Button
-              variant="text"
-              sx={styles.button}
-              onClick={() => navigate("/")}
-            >
+            <Button variant="text" sx={styles.button} onClick={() => navigate("/")}>
               Home
             </Button>
-            {!(
-              location.pathname === "/customer" ||
-              location.pathname === "/airline-staff"
-            ) ? (
-              <Button
-                variant="text"
-                sx={styles.button}
-                onClick={() => navigate("/sign-in")}
-              >
+            {!(location.pathname === "/customer" || location.pathname === "/airline-staff") ? (
+              <Button variant="text" sx={styles.button} onClick={() => navigate("/sign-in")}>
                 Sign In
               </Button>
             ) : (

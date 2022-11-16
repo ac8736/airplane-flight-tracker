@@ -2,10 +2,12 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pymysql.cursors
 import bcrypt
+from functools import wraps
 import jwt
+import datetime
 
 app = Flask(__name__)
-
+app.config["SECRET_KEY"] = "secret_key"
 CORS(app)
 conn = pymysql.connect(host='localhost',
                        user='root',
@@ -13,6 +15,23 @@ conn = pymysql.connect(host='localhost',
                        db='airline_ticket_reservation',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
+
+
+# def token_required(f):
+#     @wraps(f)
+#     def decorated(*args, **kwargs):
+#         token = request.headers['Authorization']
+#         token = token.split(" ")[1]
+#         if not token:
+#             return jsonify({"Error": "Token is missing."})
+#         try:
+#             jwt.decode(token, app.config['SECRET_KEY'], algorithms="HS256")
+#         except jwt.ExpiredSignatureError:
+#             return jsonify({'Error': 'Expired token.'})
+#         except jwt.DecodeError:
+#             return jsonify({'Error': 'Invalid token.'})
+#         return f(*args, **kwargs)
+#     return decorated
 
 
 @app.route("/all-flights", methods=['GET'])
@@ -35,13 +54,14 @@ def register_customer():
         return jsonify({'status': 'Email already in use.'}), 409
     query = "INSERT INTO customer VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     hashed_password = bcrypt.hashpw(new_account["password"].encode('utf8'), bcrypt.gensalt())
-    cursor.execute(query, (new_account["email"], new_account["full_name"], hashed_password, new_account["building_number"], 
-                           new_account["street"], new_account["city"], new_account["state"], new_account["phone_number"], 
-                           new_account["passport_number"], new_account["passport_expiration"], new_account["passport_country"], 
+    cursor.execute(query, (new_account["email"], new_account["fullName"], hashed_password, new_account["buildingNumber"], 
+                           new_account["street"], new_account["city"], new_account["state"], new_account["phoneNumber"], 
+                           new_account["passportNumber"], new_account["passportExpiration"], new_account["passportCountry"], 
                            new_account["dob"]))
     conn.commit()
     cursor.close()
-    return jsonify({'status': 'Successfully registered customer.'}), 200
+    token = jwt.encode({'email': new_account["email"], 'role': 'customer', 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)}, app.config['SECRET_KEY'], "HS256")
+    return jsonify({'status': 'Successfully registered customer.', 'token': token}), 200
 
 
 @app.route("/register-airline-staff", methods=["GET", "POST"])
@@ -58,11 +78,12 @@ def register_airline_staff():
         return jsonify({'status': 'Airline does not exist.'}), 409
     query = "INSERT INTO airline_staff VALUES(%s, %s, %s, %s, %s, %s)"
     hashed_password = bcrypt.hashpw(new_account["password"].encode('utf8'), bcrypt.gensalt())
-    cursor.execute(query, (new_account["username"], hashed_password, new_account["first_name"], 
-                           new_account["last_name"], new_account["dob"], new_account["airline"]))
+    cursor.execute(query, (new_account["username"], hashed_password, new_account["firstName"], 
+                           new_account["lastName"], new_account["dob"], new_account["airline"]))
     conn.commit()
     cursor.close()
-    return jsonify({'status': 'Successfully registered airline staff'}), 200
+    token = jwt.encode({'username': new_account['username'], 'role': 'airline-staff', 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)}, app.config['SECRET_KEY'], "HS256")
+    return jsonify({'status': 'Successfully registered airline staff', 'token': token}), 200
 
 
 @app.route("/login-customer", methods=["POST"])
@@ -74,7 +95,8 @@ def login_customer():
     user = cursor.fetchone()
     if not user or not bcrypt.checkpw(user_json["password"].encode('utf8'), user['acc_password'].encode("utf8")):
         return jsonify({'status': 'Incorrect Email or Password'}), 403
-    return jsonify({'status': 'Successfully logged in.'}), 200
+    token = jwt.encode({'username': user_json["email"], 'role': 'customer', 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)}, app.config['SECRET_KEY'], "HS256")
+    return jsonify({'status': 'Successfully logged in.', 'token': token}), 200
 
 
 @app.route("/login-airline-staff", methods=['POST'])
@@ -86,7 +108,8 @@ def login_airline_staff():
     user = cursor.fetchone()
     if not user or not bcrypt.checkpw(user_json["password"].encode('utf8'), user['acc_password'].encode('utf8')):
         return jsonify({'status': 'Incorrect Username or Password'}), 403
-    return jsonify({'status': 'Successfully logged in.'}), 200
+    token = jwt.encode({'username': user_json["username"], 'role': 'airline-staff', 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)}, app.config['SECRET_KEY'], "HS256")
+    return jsonify({'status': 'Successfully logged in.', "token": token}), 200
 
 
 if __name__ == "__main__":

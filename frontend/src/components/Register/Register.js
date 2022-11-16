@@ -48,9 +48,7 @@ export default function Register() {
     }
     try {
       const response = await fetch(
-        !isCustomer
-          ? "http://127.0.0.1:5000/register-airline-staff"
-          : "http://127.0.0.1:5000/register-customer",
+        !isCustomer ? "http://127.0.0.1:5000/register-airline-staff" : "http://127.0.0.1:5000/register-customer",
         {
           method: "POST",
           headers: {
@@ -64,7 +62,8 @@ export default function Register() {
         alert(data.status);
         return;
       } else {
-        navigate("/");
+        localStorage.setItem("token", data.token);
+        navigate(isCustomer ? "/customer" : "/airline-staff");
       }
     } catch (error) {
       console.log(error);
@@ -76,27 +75,21 @@ export default function Register() {
       <Box sx={styles.formContainer}>
         <Box>
           <Typography fontSize="2.4rem">Register</Typography>
-          <Typography fontSize="1.1rem">
-            {isCustomer ? "Customer" : "Airline Staff"}
-          </Typography>
+          <Typography fontSize="1.1rem">{isCustomer ? "Customer" : "Airline Staff"}</Typography>
         </Box>
         {isCustomer ? (
           <>
             <Box sx={styles.inputs}>
               <TextField
                 placeholder="Full Name"
-                onChange={(e) =>
-                  setCustomer({ ...customer, fullName: e.target.value })
-                }
+                onChange={(e) => setCustomer({ ...customer, fullName: e.target.value })}
                 value={customer.fullName}
                 required
                 variant="standard"
               />
               <TextField
                 placeholder="Email"
-                onChange={(e) =>
-                  setCustomer({ ...customer, email: e.target.value })
-                }
+                onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
                 value={customer.email}
                 required
                 variant="standard"
@@ -104,9 +97,7 @@ export default function Register() {
               />
               <TextField
                 placeholder="Password"
-                onChange={(e) =>
-                  setCustomer({ ...customer, password: e.target.value })
-                }
+                onChange={(e) => setCustomer({ ...customer, password: e.target.value })}
                 value={customer.password}
                 required
                 variant="standard"
@@ -120,24 +111,18 @@ export default function Register() {
                 variant="standard"
                 type="password"
                 error={customerVerifyPwdError}
-                helperText={
-                  customerVerifyPwdError ? "Passwords do not match" : ""
-                }
+                helperText={customerVerifyPwdError ? "Passwords do not match" : ""}
               />
               <TextField
                 placeholder="Date of Birth (YYYY-MM-DD)"
-                onChange={(e) =>
-                  setCustomer({ ...customer, dob: e.target.value })
-                }
+                onChange={(e) => setCustomer({ ...customer, dob: e.target.value })}
                 value={customer.dob}
                 required
                 variant="standard"
               />
               <TextField
                 placeholder="Phone Number (XXX-XXX-XXXX)"
-                onChange={(e) =>
-                  setCustomer({ ...customer, phoneNumber: e.target.value })
-                }
+                onChange={(e) => setCustomer({ ...customer, phoneNumber: e.target.value })}
                 value={customer.phoneNumber}
                 required
                 variant="standard"
@@ -146,36 +131,28 @@ export default function Register() {
             <Box sx={styles.inputs}>
               <TextField
                 placeholder="Building Number"
-                onChange={(e) =>
-                  setCustomer({ ...customer, buildingNumber: e.target.value })
-                }
+                onChange={(e) => setCustomer({ ...customer, buildingNumber: e.target.value })}
                 value={customer.buildingNumber}
                 required
                 variant="standard"
               />
               <TextField
                 placeholder="Street"
-                onChange={(e) =>
-                  setCustomer({ ...customer, street: e.target.value })
-                }
+                onChange={(e) => setCustomer({ ...customer, street: e.target.value })}
                 value={customer.street}
                 required
                 variant="standard"
               />
               <TextField
                 placeholder="City"
-                onChange={(e) =>
-                  setCustomer({ ...customer, city: e.target.value })
-                }
+                onChange={(e) => setCustomer({ ...customer, city: e.target.value })}
                 value={customer.city}
                 required
                 variant="standard"
               />
               <TextField
                 placeholder="State"
-                onChange={(e) =>
-                  setCustomer({ ...customer, state: e.target.value })
-                }
+                onChange={(e) => setCustomer({ ...customer, state: e.target.value })}
                 value={customer.state}
                 required
                 variant="standard"
@@ -184,9 +161,7 @@ export default function Register() {
             <Box sx={styles.inputs}>
               <TextField
                 placeholder="Passport Number"
-                onChange={(e) =>
-                  setCustomer({ ...customer, passportNumber: e.target.value })
-                }
+                onChange={(e) => setCustomer({ ...customer, passportNumber: e.target.value })}
                 value={customer.passportNumber}
                 required
                 variant="standard"
@@ -205,9 +180,7 @@ export default function Register() {
               />
               <TextField
                 placeholder="Passport Country"
-                onChange={(e) =>
-                  setCustomer({ ...customer, passportCountry: e.target.value })
-                }
+                onChange={(e) => setCustomer({ ...customer, passportCountry: e.target.value })}
                 value={customer.passportCountry}
                 required
                 variant="standard"
@@ -218,36 +191,28 @@ export default function Register() {
           <Box sx={styles.inputs}>
             <TextField
               placeholder="Username"
-              onChange={(e) =>
-                setAirlineStaff({ ...airlineStaff, username: e.target.value })
-              }
+              onChange={(e) => setAirlineStaff({ ...airlineStaff, username: e.target.value })}
               value={airlineStaff.username}
               required
               variant="standard"
             />
             <TextField
               placeholder="First Name"
-              onChange={(e) =>
-                setAirlineStaff({ ...airlineStaff, firstName: e.target.value })
-              }
+              onChange={(e) => setAirlineStaff({ ...airlineStaff, firstName: e.target.value })}
               value={airlineStaff.firstName}
               required
               variant="standard"
             />
             <TextField
               placeholder="Last Name"
-              onChange={(e) =>
-                setAirlineStaff({ ...airlineStaff, lastName: e.target.value })
-              }
+              onChange={(e) => setAirlineStaff({ ...airlineStaff, lastName: e.target.value })}
               value={airlineStaff.lastName}
               required
               variant="standard"
             />
             <TextField
               placeholder="Password"
-              onChange={(e) =>
-                setAirlineStaff({ ...airlineStaff, password: e.target.value })
-              }
+              onChange={(e) => setAirlineStaff({ ...airlineStaff, password: e.target.value })}
               value={airlineStaff.password}
               required
               variant="standard"
@@ -265,18 +230,14 @@ export default function Register() {
             />
             <TextField
               placeholder="Date of Birth (YYYY-MM-DD)"
-              onChange={(e) =>
-                setAirlineStaff({ ...airlineStaff, dob: e.target.value })
-              }
+              onChange={(e) => setAirlineStaff({ ...airlineStaff, dob: e.target.value })}
               value={airlineStaff.dob}
               required
               variant="standard"
             />
             <TextField
               placeholder="Airline"
-              onChange={(e) =>
-                setAirlineStaff({ ...airlineStaff, airline: e.target.value })
-              }
+              onChange={(e) => setAirlineStaff({ ...airlineStaff, airline: e.target.value })}
               value={airlineStaff.airline}
               required
               variant="standard"
@@ -287,10 +248,7 @@ export default function Register() {
           <Button type="submit" variant="contained" sx={styles.button}>
             Register
           </Button>
-          <Button
-            sx={{ textTransform: "none", marginLeft: "19px" }}
-            onClick={() => setIsCustomer((prev) => !prev)}
-          >
+          <Button sx={{ textTransform: "none", marginLeft: "19px" }} onClick={() => setIsCustomer((prev) => !prev)}>
             {isCustomer ? "Are you airline staff?" : "Are you a customer?"}
           </Button>
         </Box>
