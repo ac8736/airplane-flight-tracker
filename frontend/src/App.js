@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar/Navbar";
 import SignIn from "./pages/SignIn/SignIn";
 import Customer from "./pages/Customer/Customer";
 import AirlineStaff from "./pages/AirlineStaff/AirlineStaff";
+import Logout from "./pages/Logout/Logout";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/customer" element={<Customer />} />
         <Route path="/airline-staff" element={<AirlineStaff />} />
+        <Route path="/logout" element={<Logout />} />
       </Routes>
     </BrowserRouter>
   );

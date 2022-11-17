@@ -14,7 +14,7 @@ export default function Navbar() {
 
   function logOut() {
     localStorage.clear();
-    navigate("/");
+    navigate("/logout");
   }
 
   return (

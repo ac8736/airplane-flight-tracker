@@ -17,21 +17,21 @@ conn = pymysql.connect(host='localhost',
                        cursorclass=pymysql.cursors.DictCursor)
 
 
-# def token_required(f):
-#     @wraps(f)
-#     def decorated(*args, **kwargs):
-#         token = request.headers['Authorization']
-#         token = token.split(" ")[1]
-#         if not token:
-#             return jsonify({"Error": "Token is missing."})
-#         try:
-#             jwt.decode(token, app.config['SECRET_KEY'], algorithms="HS256")
-#         except jwt.ExpiredSignatureError:
-#             return jsonify({'Error': 'Expired token.'})
-#         except jwt.DecodeError:
-#             return jsonify({'Error': 'Invalid token.'})
-#         return f(*args, **kwargs)
-#     return decorated
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers['Authorization']
+        token = token.split(" ")[1]
+        if not token:
+            return jsonify({"Error": "Token is missing."})
+        try:
+            jwt.decode(token, app.config['SECRET_KEY'], algorithms="HS256")
+        except jwt.ExpiredSignatureError:
+            return jsonify({'Error': 'Expired token.'})
+        except jwt.DecodeError:
+            return jsonify({'Error': 'Invalid token.'})
+        return f(*args, **kwargs)
+    return decorated
 
 
 @app.route("/all-flights", methods=['GET'])

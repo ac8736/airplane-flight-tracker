@@ -1,5 +1,4 @@
-import { Typography, Box, Card, CardContent, CardActions, Button } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Typography, Box, CardContent } from "@mui/material";
 import { styles } from "./styles";
 
 export default function Flight({ airline, arrivalAirPort, arrivalTime, basePrice, departureAirPort, departureTime, flightNum }) {
@@ -24,9 +23,6 @@ export default function Flight({ airline, arrivalAirPort, arrivalTime, basePrice
           <Typography fontWeight="bold">Base Price: ${basePrice}</Typography>
         </Box>
       </CardContent>
-      <CardActions sx={styles.cardActions}>
-        <Button variant="contained">Book</Button>
-      </CardActions>
     </Box>
   );
 }
