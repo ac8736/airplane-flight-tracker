@@ -1,7 +1,16 @@
 import { Typography, Box, CardContent } from "@mui/material";
 import { styles } from "./styles";
 
-export default function Flight({ airline, arrivalAirPort, arrivalTime, basePrice, departureAirPort, departureTime, flightNum }) {
+export default function Flight({
+  airline,
+  arrivalAirPort,
+  arrivalTime,
+  basePrice,
+  departureAirPort,
+  departureTime,
+  flightNum,
+  flightStatus,
+}) {
   return (
     <Box sx={styles.card}>
       <CardContent sx={{ gap: "1em", display: "flex", flexDirection: "column" }}>
@@ -21,6 +30,9 @@ export default function Flight({ airline, arrivalAirPort, arrivalTime, basePrice
         </Box>
         <Box sx={styles.group}>
           <Typography fontWeight="bold">Base Price: ${basePrice}</Typography>
+          <Typography fontWeight="bold">
+            Flight Status: <span style={{ color: flightStatus === "On-time" ? "green" : "red" }}>{flightStatus}</span>
+          </Typography>
         </Box>
       </CardContent>
     </Box>

@@ -1,16 +1,26 @@
 import { styles } from "./styles";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy } from "react";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { Typography, Box, Button } from "@mui/material";
 import ViewFlights from "./Modals/ViewFlight/ViewFlights";
-import CreateFlight from "./Modals/CreateFlight/CreateFlight";
-import ChangeFlightStatus from "./Modals/ChangeFlightStatus/ChangeFlightStatus";
-import AddAirplane from "./Modals/AddAirplane/AddAirplane";
-import ViewFlightRatings from "./Modals/ViewFlightRatings/ViewFlightRatings";
-import ViewFrequentCustomers from "./Modals/ViewFrequentCustomers/ViewFrequentCustomers";
-import ViewReports from "./Modals/ViewReports/ViewReports";
-import ViewRevenue from "./Modals/ViewRevenue/ViewRevenue";
+//import CreateFlight from "./Modals/CreateFlight/CreateFlight";
+// import ChangeFlightStatus from "./Modals/ChangeFlightStatus/ChangeFlightStatus";
+// import AddAirplane from "./Modals/AddAirplane/AddAirplane";
+// import ViewFlightRatings from "./Modals/ViewFlightRatings/ViewFlightRatings";
+// import ViewFrequentCustomers from "./Modals/ViewFrequentCustomers/ViewFrequentCustomers";
+// import ViewReports from "./Modals/ViewReports/ViewReports";
+// import ViewRevenue from "./Modals/ViewRevenue/ViewRevenue";
+// import AddAirport from "./Modals/AddAirport/AddAirport";
+
+const CreateFlight = lazy(() => import("./Modals/CreateFlight/CreateFlight"));
+const ChangeFlightStatus = lazy(() => import("./Modals/ChangeFlightStatus/ChangeFlightStatus"));
+const AddAirplane = lazy(() => import("./Modals/AddAirplane/AddAirplane"));
+const ViewFlightRatings = lazy(() => import("./Modals/ViewFlightRatings/ViewFlightRatings"));
+const ViewFrequentCustomers = lazy(() => import("./Modals/ViewFrequentCustomers/ViewFrequentCustomers"));
+const ViewReports = lazy(() => import("./Modals/ViewReports/ViewReports"));
+const ViewRevenue = lazy(() => import("./Modals/ViewRevenue/ViewRevenue"));
+const AddAirport = lazy(() => import("./Modals/AddAirport/AddAirport"));
 
 export default function AirlineStaff() {
   const navigate = useNavigate();
@@ -23,6 +33,13 @@ export default function AirlineStaff() {
   const [viewFrequentCustomersOpen, setViewFrequentCustomersOpen] = useState(false);
   const [viewReportsOpen, setViewReportsOpen] = useState(false);
   const [viewRevenueOpen, setViewRevenueOpen] = useState(false);
+  const [addAirportOpen, setAddAirportOpen] = useState(false);
+
+  const [flights, setFlights] = useState([]);
+  const [planeIds, setPlaneIds] = useState([]);
+  const [airports, setAirports] = useState([]);
+
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem("token") || jwt_decode(localStorage.getItem("token")).role !== "airline-staff") {
@@ -30,18 +47,67 @@ export default function AirlineStaff() {
     } else {
       setAirlineStaff(jwt_decode(localStorage.getItem("token")));
     }
-  }, [navigate]);
+
+    async function getFlights() {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/flights-by-airline", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        setFlights(data.flights);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    async function getPlanesAndAirports() {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/get-airplanes", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        setPlaneIds(data.airplanes);
+        const response2 = await fetch("http://127.0.0.1:5000/get-airports");
+        const data2 = await response2.json();
+        setAirports(data2.airports);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getPlanesAndAirports();
+    getFlights();
+  }, [navigate, update]);
 
   return (
     <div>
       <ViewFlights open={viewFlightsOpen} close={() => setViewFlightsOpen(false)} />
-      <CreateFlight open={createFlightsOpen} close={() => setCreateFlightsOpen(false)} />
-      <ChangeFlightStatus open={changeFlightStatusOpen} close={() => setChangeFlightStatusOpen(false)} />
+      <CreateFlight
+        open={createFlightsOpen}
+        close={() => setCreateFlightsOpen(false)}
+        planeIds={planeIds}
+        airports={airports}
+        update={() => setUpdate((prev) => !prev)}
+      />
+      <ChangeFlightStatus
+        open={changeFlightStatusOpen}
+        close={() => setChangeFlightStatusOpen(false)}
+        flights={flights}
+        update={() => setUpdate((prev) => !prev)}
+      />
       <AddAirplane open={addAirplaneOpen} close={() => setAddAirplaneOpen(false)} />
       <ViewFlightRatings open={viewFlightRatingsOpen} close={() => setViewFlightRatingsOpen(false)} />
       <ViewFrequentCustomers open={viewFrequentCustomersOpen} close={() => setViewFrequentCustomersOpen(false)} />
       <ViewReports open={viewReportsOpen} close={() => setViewReportsOpen(false)} />
       <ViewRevenue open={viewRevenueOpen} close={() => setViewRevenueOpen(false)} />
+      <AddAirport open={addAirportOpen} close={() => setAddAirportOpen(false)} />
       <Box sx={styles.textContainer}>
         <Typography variant="h1" fontSize="3rem">
           Welcome, {airlineStaff.username}
@@ -60,6 +126,9 @@ export default function AirlineStaff() {
         </Button>
         <Button variant="contained" sx={styles.button} onClick={() => setAddAirplaneOpen(true)}>
           Add Airplane in the System
+        </Button>
+        <Button variant="contained" sx={styles.button} onClick={() => setAddAirportOpen(true)}>
+          Add Airport in the System
         </Button>
         <Button variant="contained" sx={styles.button} onClick={() => setViewFlightRatingsOpen(true)}>
           View Flight Ratings

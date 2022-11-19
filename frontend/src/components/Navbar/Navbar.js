@@ -28,9 +28,11 @@ export default function Navbar() {
             </Typography>
           </Box>
           <Box sx={styles.navOptions}>
-            <Button variant="text" sx={styles.button} onClick={() => navigate("/")}>
-              Home
-            </Button>
+            {(location.pathname === "/" || location.pathname === "/logout") && (
+              <Button variant="text" sx={styles.button} onClick={() => navigate("/")}>
+                Home
+              </Button>
+            )}
             {!(location.pathname === "/customer" || location.pathname === "/airline-staff") ? (
               <Button variant="text" sx={styles.button} onClick={() => navigate("/sign-in")}>
                 Sign In

@@ -9,5 +9,20 @@ export const styles = {
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
+    textAlign: "center",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1em",
+  },
+  airplaneDisplay: {
+    height: "50vh",
+    overflowY: "auto",
+    p: ".5em",
+  },
+  airplanes: {
+    border: "1px solid black",
+    margin: "auto",
+    marginTop: "1em",
+    p: "1.2em",
   },
 };

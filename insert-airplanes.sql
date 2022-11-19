@@ -1,0 +1,15 @@
+INSERT INTO airplane VALUES(1, 40, "Boeing", 33, "Delta Air Lines");
+INSERT INTO airplane VALUES(2, 190, "Boeing", 12, "Delta Air Lines");
+INSERT INTO airplane VALUES(3, 150, "Cessna", 1, "Air Canada");
+INSERT INTO airplane VALUES(4, 25, "Cessna", 4, "Emirates");
+INSERT INTO airplane VALUES(5, 120, "Embraer", 10, "Ryanair");
+INSERT INTO airplane VALUES(6, 110, "Airbus", 12, "Ravn Alaska");
+INSERT INTO airplane VALUES(7, 120, "Airbus", 11, "Aeroflot");
+INSERT INTO airplane VALUES(8, 90, "Boeing", 7, "American Airlines");
+INSERT INTO airplane VALUES(9, 110, "Beechcraft", 2, "Aer Lingus");
+INSERT INTO airplane VALUES(10, 90, "Boeing", 5, "Alaska Airlines");
+INSERT INTO airplane VALUES(11, 76, "Embraer", 9, "United Airlines");
+INSERT INTO airplane VALUES(12, 50, "Cessna", 6, "Frontier Airlines");
+INSERT INTO airplane VALUES(13, 64, "Cessna", 7, "KLM");
+INSERT INTO airplane VALUES(14, 52, "Airbus", 7, "Cathay Pacific");
+INSERT INTO airplane VALUES(15, 200, "Airbus", 10, "Southwest Airlines");

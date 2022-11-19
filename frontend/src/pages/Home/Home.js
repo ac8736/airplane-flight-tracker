@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import { styles } from "./styles";
 import { Typography, Input, CircularProgress, Box } from "@mui/material";
 import jwt_decode from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Home() {
+  const location = useLocation();
   const navigate = useNavigate();
   const [flights, setFlights] = useState([]);
   const [search, setSearch] = useState({
@@ -37,7 +38,7 @@ export default function Home() {
     }
 
     getAllFlights();
-  }, []);
+  }, [location, navigate]);
 
   const searchedFlights = flights.filter(
     (flight) =>
@@ -56,6 +57,7 @@ export default function Home() {
       departureAirPort={flight.departure_airport}
       departureTime={flight.departure_date_and_time}
       flightNum={flight.flight_number}
+      flightStatus={flight.flight_status}
     />
   ));
 

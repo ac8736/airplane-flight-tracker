@@ -9,5 +9,9 @@ export const styles = {
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
+    textAlign: "center",
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
   },
 };

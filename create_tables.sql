@@ -36,7 +36,8 @@ CREATE TABLE airplane(
     manufacturing_company varchar(15),
     age	int,
     airline varchar(20),
-    PRIMARY KEY (ID)
+    PRIMARY KEY (ID),
+    FOREIGN KEY (airline) REFERENCES airline(name)
 );
 
 CREATE TABLE flight(
@@ -48,6 +49,7 @@ CREATE TABLE flight(
     arrival_date_and_time	Datetime,
     base_price			int,
     plane_id int,
+    flight_status char(7),
     PRIMARY KEY (flight_number, departure_date_and_time),
     FOREIGN KEY (departure_airport) REFERENCES airport(name),
     FOREIGN KEY (arrival_airport) REFERENCES airport(name),

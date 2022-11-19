@@ -1,6 +1,6 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Select, TextField, Typography, MenuItem, FormHelperText, FormControl } from "@mui/material";
 import { styles } from "./styles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
@@ -32,6 +32,21 @@ export default function Register() {
   const [customerVerifyPwd, setCustomerVerifyPwd] = useState("");
   const [airlineVerifyPwdError, setAirlineVerifyPwdError] = useState(false);
   const [customerVerifyPwdError, setCustomerVerifyPwdError] = useState(false);
+  const [airlines, setAirlines] = useState([]);
+
+  useEffect(() => {
+    async function getAirlines() {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/get-airlines");
+        const data = await response.json();
+        setAirlines(data.airlines);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    getAirlines();
+  }, []);
 
   async function register(e) {
     e.preventDefault();
@@ -235,13 +250,22 @@ export default function Register() {
               required
               variant="standard"
             />
-            <TextField
-              placeholder="Airline"
-              onChange={(e) => setAirlineStaff({ ...airlineStaff, airline: e.target.value })}
-              value={airlineStaff.airline}
-              required
-              variant="standard"
-            />
+            <FormControl sx={{ width: "50%" }}>
+              <FormHelperText>Select your airline.</FormHelperText>
+              <Select
+                variant="standard"
+                required
+                value={airlineStaff.airline}
+                onChange={(e) => setAirlineStaff({ ...airlineStaff, airline: e.target.value })}
+                MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
+              >
+                {airlines.map((airline) => (
+                  <MenuItem key={airline.name} value={airline.name}>
+                    {airline.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
         )}
         <Box>

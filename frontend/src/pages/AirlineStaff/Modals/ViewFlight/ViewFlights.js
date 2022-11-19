@@ -1,7 +1,12 @@
 import { Modal, Typography, Box } from "@mui/material";
 import { styles } from "./styles";
+import { useState, useEffect } from "react";
 
 export default function ViewFlights({ open, close }) {
+  useEffect(() => {
+    console.log("ViewFlights mounted");
+  }, []);
+
   return (
     <Modal open={open} onClose={close}>
       <Box sx={styles.modal}>
