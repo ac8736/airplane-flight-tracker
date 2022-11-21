@@ -273,7 +273,6 @@ def add_flight():
     conn.close()
     return jsonify({'status': 'Successful.'}), 200
 
-@token_required
 @app.route("/get-earned-revenue", methods=["GET"])
 def get_earned_revenue():
     conn = create_connection()
