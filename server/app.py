@@ -273,5 +273,22 @@ def add_flight():
     conn.close()
     return jsonify({'status': 'Successful.'}), 200
 
+@token_required
+@app.route("/get-earned-revenue", methods=["GET"])
+def get_earned_revenue():
+    conn = create_connection()
+    cursor = conn.cursor()
+    query = "SELECT ID FROM purchase NATURAL JOIN ticket WHERE purchase.purchase_date_and_time=%s"
+    cursor.execute(query, (request.json["purchaseDateTime"]))
+    ticket_data = cursor.fetchall()
+    query = "SELECT SUM(sold_price) FROM ticket_data"
+    cursor.execute(query)
+    data = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return jsonify({'revenue': data}), 200
+
+    
+
 if __name__ == "__main__":
     app.run("127.0.0.1", 5000, debug=True)
