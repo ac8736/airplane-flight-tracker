@@ -277,11 +277,8 @@ def add_flight():
 def get_earned_revenue():
     conn = create_connection()
     cursor = conn.cursor()
-    query = "SELECT ID FROM purchase NATURAL JOIN ticket WHERE purchase.purchase_date_and_time=%s"
+    query = "SELECT SUM(sold_price) FROM SELECT ID FROM purchase NATURAL JOIN ticket WHERE purchase.purchase_date_and_time=%s"
     cursor.execute(query, (request.json["purchaseDateTime"]))
-    ticket_data = cursor.fetchall()
-    query = "SELECT SUM(sold_price) FROM ticket_data"
-    cursor.execute(query)
     data = cursor.fetchone()
     cursor.close()
     conn.close()
