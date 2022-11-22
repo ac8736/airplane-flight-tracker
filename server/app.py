@@ -47,6 +47,7 @@ def all_flights():
     conn.close()
     return jsonify({'flights': data})
 
+
 @token_required
 @app.route("/flights-by-airline", methods=['GET'])
 def flights_by_airline():
@@ -77,6 +78,20 @@ def change_flight_status():
     cursor.close()
     conn.close()
     return jsonify({'status': 'Flight status updated.'}), 200
+
+
+@token_required
+@app.route("/search-flight", methods=['POST'])
+def search_flight():
+    conn = create_connection()
+    cursor = conn.cursor()
+    search = request.json
+    query = "SELECT * FROM flight WHERE departure_airport=%s AND arrival_airport=%s AND departure_date_and_time=%s AND arrival_date_and_time=%s"
+    cursor.execute(query, (search["departureAirport"], search["arrivalAirport"], search["departureDate"], search["arrivalDate"]))
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'flights': data})
 
 
 @app.route("/get-airlines", methods=["GET"])
@@ -273,6 +288,7 @@ def add_flight():
     conn.close()
     return jsonify({'status': 'Successful.'}), 200
 
+##
 @app.route("/get-earned-revenue", methods=["GET"])
 def get_earned_revenue():
     conn = create_connection()
@@ -284,7 +300,57 @@ def get_earned_revenue():
     conn.close()
     return jsonify({'revenue': data}), 200
 
-    
+
+@token_required
+@app.route("/purchase-ticket", methods=["POST"])
+def purchase_ticket():
+    conn = create_connection()
+    cursor = conn.cursor()
+    payment = request.json
+    query = "SELECT * FROM flight WHERE flight_number=%s"
+    cursor.execute(query, (payment["id"]))
+    flight = cursor.fetchone()
+    query = "SELECT COUNT(*) as count FROM ticket"
+    cursor.execute(query)
+    ticket_id = cursor.fetchone()["count"] + 1
+    query = "INSERT INTO ticket VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    cursor.execute(query, (ticket_id, payment["email"], flight["airline"], flight["flight_number"], flight["base_price"], payment["cardNumber"], payment["purchaseDate"], payment["cardType"], payment["cardName"], payment["cardExpiration"]))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'status': 'Successful.'}), 200
+
+
+@token_required
+@app.route("/get-tickets", methods=["GET"])
+def get_tickets():
+    conn = create_connection()
+    cursor = conn.cursor()
+    auth = request.headers['Authorization'].split(" ")[1]
+    auth = jwt.decode(auth, app.config['SECRET_KEY'], algorithms="HS256")
+    query = "SELECT * FROM ticket NATURAL JOIN flight WHERE customer_email=%s"
+    cursor.execute(query, (auth["username"]))
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({"tickets": data}), 200
+
+
+@token_required
+@app.route("/cancel-flight", methods=["POST"])
+def cancel_flight():
+    conn = create_connection()
+    cursor = conn.cursor()
+    auth = request.headers['Authorization'].split(" ")[1] 
+    auth = jwt.decode(auth, app.config['SECRET_KEY'], algorithms="HS256")
+    email = auth["username"]
+    query = "DELETE FROM ticket WHERE customer_email=%s AND flight_number=%s"
+    cursor.execute(query, (email, request.json["flightNumber"]))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'status': 'Successful.'}), 200
+
 
 if __name__ == "__main__":
     app.run("127.0.0.1", 5000, debug=True)

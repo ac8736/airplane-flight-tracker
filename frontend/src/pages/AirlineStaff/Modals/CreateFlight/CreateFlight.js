@@ -1,7 +1,7 @@
 import { styles } from "./styles";
 import { Modal, Box, Typography, Input, FormLabel, Button, Select, MenuItem, FormHelperText } from "@mui/material";
 import DatePicker from "react-datepicker";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function CreateFlights({ open, close, planeIds, airports, update }) {
@@ -17,18 +17,12 @@ export default function CreateFlights({ open, close, planeIds, airports, update 
   const [departureDateTime, setDepartureDateTime] = useState(new Date());
   const [arrivalDateTime, setArrivalDateTime] = useState(new Date());
 
-  useEffect(() => {}, []);
-
   async function addFlight(e) {
     e.preventDefault();
     flight.departureDateTime = departureDateTime.toISOString().slice(0, 19).replace("T", " ");
     flight.arrivalDateTime = arrivalDateTime.toISOString().slice(0, 19).replace("T", " ");
     if (departureDateTime > arrivalDateTime) {
       alert("Departure date must be before arrival date.");
-      return;
-    }
-    if (flight.departureAirport === flight.arrivalAirport) {
-      alert("Departure airport and arrival airport must be different.");
       return;
     }
     try {

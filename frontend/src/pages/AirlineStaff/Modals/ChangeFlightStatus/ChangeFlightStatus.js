@@ -21,7 +21,7 @@ export default function ChangeFlightStatus({ open, close, flights, update }) {
             >
               <Typography>Flight Number: {flight.flight_number}</Typography>
               <Typography>
-                Flight Status:{" "}
+                Flight Status:
                 <span style={flight.flight_status === "On-time" ? { color: "green" } : { color: "red" }}>
                   {flight.flight_status}
                 </span>

@@ -63,21 +63,13 @@ CREATE TABLE ticket(
     airline_name varchar(10),
     flight_number int,
     sold_price int,
-    PRIMARY KEY (ID),
-    FOREIGN KEY (flight_number) REFERENCES flight(flight_number)
-);
-
-CREATE TABLE purchase(
-    email varchar(30),
-    ID char(9),
     card_number char(16),
     purchase_date_and_time Datetime,
     card_type varchar(15),
     card_name varchar(20),
     card_expiration Date,
     PRIMARY KEY (ID),
-    FOREIGN KEY (email) REFERENCES customer(email),
-    FOREIGN KEY (ID) REFERENCES ticket(ID)
+    FOREIGN KEY (flight_number) REFERENCES flight(flight_number)
 );
   
 CREATE TABLE rate(

@@ -4,14 +4,6 @@ import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { Typography, Box, Button } from "@mui/material";
 import ViewFlights from "./Modals/ViewFlight/ViewFlights";
-//import CreateFlight from "./Modals/CreateFlight/CreateFlight";
-// import ChangeFlightStatus from "./Modals/ChangeFlightStatus/ChangeFlightStatus";
-// import AddAirplane from "./Modals/AddAirplane/AddAirplane";
-// import ViewFlightRatings from "./Modals/ViewFlightRatings/ViewFlightRatings";
-// import ViewFrequentCustomers from "./Modals/ViewFrequentCustomers/ViewFrequentCustomers";
-// import ViewReports from "./Modals/ViewReports/ViewReports";
-// import ViewRevenue from "./Modals/ViewRevenue/ViewRevenue";
-// import AddAirport from "./Modals/AddAirport/AddAirport";
 
 const CreateFlight = lazy(() => import("./Modals/CreateFlight/CreateFlight"));
 const ChangeFlightStatus = lazy(() => import("./Modals/ChangeFlightStatus/ChangeFlightStatus"));
