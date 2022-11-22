@@ -2,38 +2,38 @@
 # Justin Xiong (jx1279)
 
 CREATE TABLE customer(
-	email	 varchar(30),
-    name 	 varchar(20),
-    acc_password varchar(100),
-    building_number varchar(10),
-    street 	 varchar(10),
-    city	 varchar(10),
-    state	 char(2),
-    phone_number varchar(20),
-    passport_number varchar(15),
-    passport_expiration Date,
-    passport_country varchar(20),
-    date_of_birth 	 Date,
+	email	 varchar(30) NOT NULL,
+    name 	 varchar(20) NOT NULL,
+    acc_password varchar(100) NOT NULL,
+    building_number varchar(10) NOT NULL,
+    street 	 varchar(10) NOT NULL,
+    city	 varchar(10) NOT NULL,
+    state	 char(2) NOT NULL,
+    phone_number varchar(20) NOT NULL,
+    passport_number varchar(15) NOT NULL,
+    passport_expiration Date NOT NULL,
+    passport_country varchar(20) NOT NULL,
+    date_of_birth 	 Date NOT NULL,
     PRIMARY KEY (email)
 );
 
 CREATE TABLE airline(
-    name varchar(20),
+    name varchar(20) NOT NULL,
     PRIMARY KEY (name)
 );
 
 CREATE TABLE airport(
-	name varchar(20),
-    city varchar(20),
-    country varchar(20),
-    airport_type varchar(20),
+	name varchar(20) NOT NULL,
+    city varchar(20) NOT NULL,
+    country varchar(20) NOT NULL,
+    airport_type varchar(20) NOT NULL,
     PRIMARY KEY (name)
 );
 
 CREATE TABLE airplane(
-    ID	int,
-    number_of_seats int,
-    manufacturing_company varchar(15),
+    ID	int NOT NULL,
+    number_of_seats int NOT NULL,
+    manufacturing_company varchar(15) NOT NULL,
     age	int,
     airline varchar(20),
     PRIMARY KEY (ID),
@@ -41,14 +41,14 @@ CREATE TABLE airplane(
 );
 
 CREATE TABLE flight(
-    flight_number	int,
-    departure_date_and_time	Datetime,
-    airline		varchar(20),
-    departure_airport  varchar(20),	
-    arrival_airport		varchar(20),
-    arrival_date_and_time	Datetime,
-    base_price			int,
-    plane_id int,
+    flight_number	int NOT NULL,
+    departure_date_and_time	Datetime NOT NULL,
+    airline		varchar(20) NOT NULL,
+    departure_airport  varchar(20) NOT NULL,	
+    arrival_airport		varchar(20) NOT NULL,
+    arrival_date_and_time	Datetime NOT NULL,
+    base_price			int NOT NULL,
+    plane_id int NOT NULL,
     flight_status char(7),
     PRIMARY KEY (flight_number, departure_date_and_time),
     FOREIGN KEY (departure_airport) REFERENCES airport(name),
@@ -58,51 +58,59 @@ CREATE TABLE flight(
 );
 
 CREATE TABLE ticket(
-    ID 		char(9),
-    customer_email varchar(30),
-    airline_name varchar(10),
-    flight_number int,
-    sold_price int,
-    card_number char(16),
-    purchase_date_and_time Datetime,
-    card_type varchar(15),
-    card_name varchar(20),
-    card_expiration Date,
+    ID 		int NOT NULL AUTO_INCREMENT,
+    customer_email varchar(30) NOT NULL,
+    airline_name varchar(10) NOT NULL,
+    flight_number int NOT NULL,
     PRIMARY KEY (ID),
     FOREIGN KEY (flight_number) REFERENCES flight(flight_number)
 );
   
+CREATE TABLE purchase(
+    customer_email varchar(30) NOT NULL,
+    ticket_id int NOT NULL,
+    card_number char(16) NOT NULL,
+    card_type varchar(15) NOT NULL,
+    card_name varchar(20) NOT NULL,
+    card_expiration Date NOT NULL,
+    purchase_date_and_time Datetime NOT NULL,
+    sold_price int NOT NULL,
+    PRIMARY KEY (customer_email, purchase_date_and_time)
+    FOREIGN KEY (customer_email) REFERENCES customer(email)
+    FOREIGN KEY (ticket_id) REFERENCES ticket(ID)
+);
+
 CREATE TABLE rate(
-    email	varchar(30),
-    flight_number	int,
-    rating		int,
-    comments	varchar(500),
+    email	varchar(30) NOT NULL,
+    flight_number	int NOT NULL,
+    rating		int NOT NULL,
+    comments	varchar(500) NOT NULL,
     PRIMARY KEY (email, flight_number),
     FOREIGN KEY (email) REFERENCES customer(email),
     FOREIGN KEY (flight_number) REFERENCES flight(flight_number)
 );
     
 CREATE TABLE airline_staff(
-    username	  varchar(20),
-    acc_password	varchar(100),
-    firstname	varchar(10),
-    lastname	varchar(10),
-    date_of_birth	Date,
-    airline		varchar(20),
+    username	  varchar(20) NOT NULL,
+    acc_password	varchar(100) NOT NULL,
+    firstname	varchar(10) NOT NULL,
+    lastname	varchar(10) NOT NULL,
+    date_of_birth	Date NOT NULL,
+    airline		varchar(20) NOT NULL,
     PRIMARY KEY (username),
     FOREIGN KEY (airline) REFERENCES airline(name)
 );
 
 CREATE TABLE airline_staff_email(
-    username varchar(20),
-    email varchar(30),
+    username varchar(20) NOT NULL,
+    email varchar(30) NOT NULL,
     PRIMARY KEY(email),
     FOREIGN KEY (username) REFERENCES airline_staff(username)
 );
     
 CREATE TABLE airline_staff_number(
-  	username varchar(20),
-    phone_number char(10),
+  	username varchar(20) NOT NULL,
+    phone_number char(10) NOT NULL,
     PRIMARY KEY (phone_number),
     FOREIGN KEY (username) REFERENCES airline_staff(username)
 );
