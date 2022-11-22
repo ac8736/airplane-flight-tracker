@@ -75,8 +75,8 @@ CREATE TABLE purchase(
     card_expiration Date NOT NULL,
     purchase_date_and_time Datetime NOT NULL,
     sold_price int NOT NULL,
-    PRIMARY KEY (customer_email, purchase_date_and_time)
-    FOREIGN KEY (customer_email) REFERENCES customer(email)
+    PRIMARY KEY (customer_email, purchase_date_and_time),
+    FOREIGN KEY (customer_email) REFERENCES customer(email),
     FOREIGN KEY (ticket_id) REFERENCES ticket(ID)
 );
 
