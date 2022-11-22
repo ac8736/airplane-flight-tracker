@@ -63,6 +63,7 @@ CREATE TABLE ticket(
     airline_name varchar(10) NOT NULL,
     flight_number int NOT NULL,
     PRIMARY KEY (ID),
+    FOREIGN KEY (customer_email) REFERENCES customer(email),
     FOREIGN KEY (flight_number) REFERENCES flight(flight_number)
 );
   
