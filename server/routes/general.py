@@ -1,5 +1,5 @@
 from config import create_connection
-from flask import request, jsonify, Blueprint
+from flask import jsonify, Blueprint
 
 general = Blueprint("general", __name__)
 

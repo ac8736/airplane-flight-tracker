@@ -62,6 +62,7 @@ CREATE TABLE ticket(
     customer_email varchar(30) NOT NULL,
     airline_name varchar(10) NOT NULL,
     flight_number int NOT NULL,
+    purchase_date_and_time Datetime NOT NULL,
     PRIMARY KEY (ID),
     FOREIGN KEY (customer_email) REFERENCES customer(email),
     FOREIGN KEY (flight_number) REFERENCES flight(flight_number)

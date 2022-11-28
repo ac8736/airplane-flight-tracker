@@ -1,9 +1,7 @@
 from config import create_connection
 from flask import request, jsonify, Blueprint
 from config import SECRET_KEY, check_authorization
-import bcrypt
-import datetime
-import jwt
+import bcrypt, datetime, jwt
 
 customer = Blueprint("customer", __name__)
 
@@ -39,7 +37,7 @@ def login_customer():
     user = cursor.fetchone()
     if not user or not bcrypt.checkpw(user_json["password"].encode('utf8'), user['acc_password'].encode("utf8")):
         return jsonify({'status': 'Incorrect Email or Password'}), 403
-    token = jwt.encode({'username': user_json["email"], 'role': 'customer', 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)}, SECRET_KEY, "HS256")
+    token = jwt.encode({'email': user_json["email"], 'role': 'customer', 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)}, SECRET_KEY, "HS256")
     cursor.close()
     conn.close()
     return jsonify({'status': 'Successfully logged in.', 'token': token}), 200
@@ -48,12 +46,14 @@ def login_customer():
 @customer.route("/cancel-flight", methods=["POST"])
 def cancel_flight():
     auth = check_authorization()
-    if auth == "Error": return jsonify({'Error': "No token or incorrect token."})
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 403
     conn = create_connection()
     cursor = conn.cursor()
-    email = auth["username"]
-    query = "DELETE FROM ticket WHERE customer_email=%s AND flight_number=%s"
-    cursor.execute(query, (email, request.json["flightNumber"]))
+    email = auth["email"]
+    query = "DELETE FROM purchase WHERE customer_email=%s AND purchase_date_and_time=%s AND ticket_id=%s"
+    cursor.execute(query, (email, request.json["purchase_date_and_time"], request.json["ticketID"]))
+    query = "DELETE FROM ticket WHERE ID=%s"
+    cursor.execute(query, (request.json["ticketID"]))
     conn.commit()
     cursor.close()
     conn.close()
@@ -62,18 +62,23 @@ def cancel_flight():
 
 @customer.route("/purchase-ticket", methods=["POST"])
 def purchase_ticket():
-    if check_authorization() == "Error": return jsonify({'Error': "No token or incorrect token."})
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 403
     conn = create_connection()
     cursor = conn.cursor()
     payment = request.json
     query = "SELECT * FROM flight WHERE flight_number=%s"
     cursor.execute(query, (payment["id"]))
     flight = cursor.fetchone()
-    query = "SELECT COUNT(*) as count FROM ticket"
-    cursor.execute(query)
-    ticket_id = cursor.fetchone()["count"] + 1
-    query = "INSERT INTO ticket VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    cursor.execute(query, (ticket_id, payment["email"], flight["airline"], flight["flight_number"], flight["base_price"], payment["cardNumber"], payment["purchaseDate"], payment["cardType"], payment["cardName"], payment["cardExpiration"]))
+    query = "INSERT INTO ticket(customer_email, airline_name, flight_number, purchase_date_and_time) VALUES(%s, %s, %s, %s)"
+    cursor.execute(query, (auth["email"], flight["airline"], flight["flight_number"], payment["purchaseDate"]))
+    query = "SELECT ID FROM ticket WHERE customer_email=%s AND airline_name=%s AND flight_number=%s AND purchase_date_and_time=%s"
+    cursor.execute(query, (auth["email"], flight["airline"], flight["flight_number"], payment["purchaseDate"]))
+    ticket_id = cursor.fetchone()
+    query = "INSERT INTO purchase VALUES(%s,%s,%s,%s,%s,%s,%s,%s)"
+    cursor.execute(query, (auth["email"], ticket_id["ID"], payment["cardNumber"], 
+                           payment["cardType"], payment["cardName"], payment["cardExpiration"], 
+                           payment["purchaseDate"], flight["base_price"]))
     conn.commit()
     cursor.close()
     conn.close()
@@ -83,11 +88,11 @@ def purchase_ticket():
 @customer.route("/get-tickets", methods=["GET"])
 def get_tickets():
     auth = check_authorization()
-    if auth == "Error": return jsonify({'Error': "No token or incorrect token."})
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 403
     conn = create_connection()
     cursor = conn.cursor()
     query = "SELECT * FROM ticket NATURAL JOIN flight WHERE customer_email=%s"
-    cursor.execute(query, (auth["username"]))
+    cursor.execute(query, (auth["email"]))
     data = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -97,7 +102,7 @@ def get_tickets():
 @customer.route("/search-flight", methods=['POST'])
 def search_flight():
     auth = check_authorization()
-    if auth == "Error": return jsonify({'Error': "No token or incorrect token."})
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 403
     conn = create_connection()
     cursor = conn.cursor()
     search = request.json
@@ -107,3 +112,29 @@ def search_flight():
     cursor.close()
     conn.close()
     return jsonify({'flights': data})
+
+
+@customer.route("/track-spending", methods=["GET"])
+def track_spending():
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 403
+    conn = create_connection()
+    cursor = conn.cursor()
+    query = "SELECT ticket_id, purchase_date_and_time, sold_price, SUM(sold_price) AS total FROM purchase WHERE customer_email=%s"
+    cursor.execute(query, (auth["email"]))
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'purchases': data})
+
+
+@customer.route("/rate-flights", methods=["POST"])
+def rate_flights():
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 403
+    conn = create_connection()
+    cursor = conn.cursor()
+    rating = request.json
+    query = "INSERT INTO rating VALUES(%s, %s, %s, %s)"
+    cursor.execute(query, (auth["email"], rating["flightNumber"], rating["star"], rating["comment"]))
+    return jsonify({'status': 'Successful.'}), 200

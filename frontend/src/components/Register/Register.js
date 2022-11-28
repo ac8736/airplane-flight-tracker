@@ -77,7 +77,7 @@ export default function Register() {
         alert(data.status);
         return;
       } else {
-        localStorage.setItem("token", data.token);
+        sessionStorage.setItem("token", data.token);
         navigate(isCustomer ? "/customer" : "/airline-staff");
       }
     } catch (error) {

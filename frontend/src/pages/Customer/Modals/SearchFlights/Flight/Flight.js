@@ -3,10 +3,10 @@ import { styles } from "./styles";
 import { useState } from "react";
 import jwt_decode from "jwt-decode";
 
-export default function Flight({ flightData }) {
+export default function Flight({ flightData, update }) {
   const [open, setOpen] = useState(false);
   const [payment, setPayment] = useState({
-    email: jwt_decode(localStorage.getItem("token")).username,
+    email: jwt_decode(sessionStorage.getItem("token")).email,
     id: flightData.flight_number,
     cardNumber: "",
     purchaseDate: new Date().toISOString().slice(0, 19).replace("T", " "),
@@ -38,11 +38,12 @@ export default function Flight({ flightData }) {
       return;
     }
     try {
+      console.log(payment);
       const response = await fetch("http://127.0.0.1:5000/purchase-ticket", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
         body: JSON.stringify(payment),
       });
@@ -50,7 +51,7 @@ export default function Flight({ flightData }) {
         alert("Purchase successful!");
         setOpen(false);
         setPayment({
-          email: jwt_decode(localStorage.getItem("token")).username,
+          email: jwt_decode(sessionStorage.getItem("token")).username,
           id: flightData.flight_number,
           cardNumber: "",
           purchaseDate: new Date().toISOString().slice(0, 19).replace("T", " "),
@@ -58,6 +59,7 @@ export default function Flight({ flightData }) {
           cardName: "",
           cardExpiration: "",
         });
+        update();
       } else {
         alert("Purchase failed.");
       }

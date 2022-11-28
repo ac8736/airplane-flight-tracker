@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Flight from "./Flight/Flight";
 
-export default function SearchFlights({ open, close }) {
+export default function SearchFlights({ open, close, update }) {
   const [search, setSearch] = useState({ departureAirport: "", arrivalAirport: "", departureDate: "", arrivalDate: "" });
   const [departureDateTime, setDepartureDateTime] = useState(new Date());
   const [arrivalDateTime, setArrivalDateTime] = useState(new Date());
@@ -44,7 +44,7 @@ export default function SearchFlights({ open, close }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
         body: JSON.stringify(search),
       });
@@ -98,7 +98,7 @@ export default function SearchFlights({ open, close }) {
         </Button>
         <Box sx={styles.flightsContainer}>
           {flights.length > 0 ? (
-            flights.map((flight, index) => <Flight key={index} flightData={flight} />)
+            flights.map((flight, index) => <Flight key={index} flightData={flight} update={update} />)
           ) : (
             <Typography>No flights.</Typography>
           )}

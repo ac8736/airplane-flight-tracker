@@ -34,10 +34,10 @@ export default function AirlineStaff() {
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem("token") || jwt_decode(localStorage.getItem("token")).role !== "airline-staff") {
+    if (!sessionStorage.getItem("token") || jwt_decode(sessionStorage.getItem("token")).role !== "airline-staff") {
       navigate("/");
     } else {
-      setAirlineStaff(jwt_decode(localStorage.getItem("token")));
+      setAirlineStaff(jwt_decode(sessionStorage.getItem("token")));
     }
 
     async function getFlights() {
@@ -46,7 +46,7 @@ export default function AirlineStaff() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         });
         const data = await response.json();
@@ -62,7 +62,7 @@ export default function AirlineStaff() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         });
         const data = await response.json();

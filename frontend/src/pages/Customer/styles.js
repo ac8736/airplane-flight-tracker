@@ -10,7 +10,7 @@ export const styles = {
     flexDirection: "column",
   },
   button: {
-    minWidth: "14%",
+    minWidth: "15%",
     marginTop: "1em",
   },
 };

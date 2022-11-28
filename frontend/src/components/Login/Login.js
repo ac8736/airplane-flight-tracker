@@ -24,7 +24,7 @@ export default function Login() {
       );
       const data = await response.json();
       if (response.status === 200) {
-        localStorage.setItem("token", data.token);
+        sessionStorage.setItem("token", data.token);
         navigate(isCustomer ? "/customer" : "/airline-staff");
       } else {
         alert(data.status);

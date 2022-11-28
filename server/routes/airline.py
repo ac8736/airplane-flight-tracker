@@ -1,9 +1,7 @@
 from flask import request, jsonify, Blueprint
-import jwt
 from config import check_authorization
 from config import create_connection
-import bcrypt
-import datetime
+import bcrypt, datetime, jwt
 from config import SECRET_KEY
 
 airline = Blueprint('airline', __name__)
@@ -160,14 +158,40 @@ def add_flight():
     return jsonify({'status': 'Successful.'}), 200
 
 
-##
-# @app.route("/get-earned-revenue", methods=["GET"])
-# def get_earned_revenue():
-#     conn = create_connection()
-#     cursor = conn.cursor()
-#     query = "SELECT SUM(sold_price) FROM SELECT ID FROM purchase NATURAL JOIN ticket WHERE purchase.purchase_date_and_time=%s"
-#     cursor.execute(query, (request.json["purchaseDateTime"]))
-#     data = cursor.fetchone()
-#     cursor.close()
-#     conn.close()
-#     return jsonify({'revenue': data}), 200
+@airline.route("/revenue", methods=["POST"])
+def get_earned_revenue():
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 403
+    conn = create_connection()
+    cursor = conn.cursor()
+    query = "SELECT airline FROM airline_staff WHERE username=%s"
+    cursor.execute(query, (auth["username"]))
+    airline = cursor.fetchone()['airline']
+    if request.json['time'] == 'month':
+        query = "SELECT SUM(sold_price) as revenue FROM `purchase` INNER JOIN ticket ON ticket.ID=purchase.ticket_id WHERE airline_name=%s AND purchase.purchase_date_and_time >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)"
+        cursor.execute(query, (airline))
+    else:
+        query = "SELECT SUM(sold_price) as revenue FROM `purchase` INNER JOIN ticket ON ticket.ID=purchase.ticket_id WHERE airline_name=%s AND purchase.purchase_date_and_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
+        cursor.execute(query, (airline))
+    data = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return jsonify({'revenue': data}), 200
+
+
+@airline.route("/customer-reports", methods=["GET"])
+def get_customer_reports():
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 403
+    conn = create_connection()
+    cursor = conn.cursor()
+    query = "SELECT customer_email FROM ticket WHERE purchase_date_and_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR) GROUP BY customer_email HAVING COUNT(*) IN (SELECT MAX(customers) FROM (SELECT COUNT(*) AS customers FROM ticket GROUP BY customer_email) AS result)"
+    cursor.execute(query)
+    most_frequent_customer = cursor.fetchone()
+    query = "SELECT airline FROM airline_staff WHERE username=%s"
+    cursor.execute(query, (auth["username"]))
+    airline = cursor.fetchone()['airline']
+    query = "SELECT DISTINCT customer_email FROM ticket WHERE airline_name=%s"
+    cursor.execute(query, (airline))
+    customers_by_airline = cursor.fetchall()
+    return jsonify({'most_frequent_customer': most_frequent_customer, 'customers_by_airline': customers_by_airline}), 200

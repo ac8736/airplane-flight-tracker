@@ -20,11 +20,11 @@ export default function Home() {
   useEffect(() => {
     async function getAllFlights() {
       try {
-        if (localStorage.getItem("token")) {
-          if (jwt_decode(localStorage.getItem("token")).role === "airline-staff") {
+        if (sessionStorage.getItem("token")) {
+          if (jwt_decode(sessionStorage.getItem("token")).role === "airline-staff") {
             navigate("/airline-staff");
           }
-          if (jwt_decode(localStorage.getItem("token")).role === "customer") {
+          if (jwt_decode(sessionStorage.getItem("token")).role === "customer") {
             navigate("/customer");
           }
         }
