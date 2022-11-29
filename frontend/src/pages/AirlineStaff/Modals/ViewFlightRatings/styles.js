@@ -9,5 +9,22 @@ export const styles = {
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
+    textAlign: "center",
+  },
+  ratingContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "50vh",
+    overflow: "auto",
+  },
+  rating: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    border: "1px solid black",
+    p: 0.5,
   },
 };

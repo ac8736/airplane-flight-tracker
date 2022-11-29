@@ -195,3 +195,30 @@ def get_customer_reports():
     cursor.execute(query, (airline))
     customers_by_airline = cursor.fetchall()
     return jsonify({'most_frequent_customer': most_frequent_customer, 'customers_by_airline': customers_by_airline}), 200
+
+
+@airline.route("/customer-flights/<customer>", methods=["GET"])
+def customer_flights(customer):
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': 'No token or incorrect token.'}), 403
+    conn = create_connection()
+    cursor = conn.cursor()
+    query = "SELECT airline FROM airline_staff WHERE username=%s"
+    cursor.execute(query, (auth["username"]))
+    airline = cursor.fetchone()['airline']
+    query = "SELECT * FROM ticket NATURAL JOIN flight WHERE customer_email=%s AND airline_name=%s"
+    cursor.execute(query, (customer, airline))
+    data = cursor.fetchall()
+    return jsonify({'customer_flights': data}), 200
+
+
+@airline.route("/get-flight-ratings/<flight_number>", methods=["GET"])
+def get_flight_ratings(flight_number):
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': 'No token or incorrect token.'}), 403
+    conn = create_connection()
+    cursor = conn.cursor()
+    query = "SELECT * FROM rate WHERE flight_number=%s"
+    cursor.execute(query, (airline, flight_number))
+    data = cursor.fetchall()
+    return jsonify({'flight_ratings': data}), 200

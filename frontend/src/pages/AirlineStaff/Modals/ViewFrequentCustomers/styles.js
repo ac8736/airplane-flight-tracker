@@ -14,4 +14,16 @@ export const styles = {
   selectBox: {
     width: "100%",
   },
+  previousFlightsContainer: {
+    display: "flex",
+    flexDirection: "column",
+    height: "50vh",
+    overflow: "auto",
+  },
+  flightContainer: {
+    display: "flex",
+    flexDirection: "column",
+    border: "1px solid black",
+    padding: "0.5em",
+  },
 };

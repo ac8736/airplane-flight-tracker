@@ -48,8 +48,14 @@ export default function ViewRevenue({ open, close }) {
         <Typography variant="h6" component="h2">
           View Revenue
         </Typography>
-        <Typography>Revenue in the Past Month: ${monthlyRevenue.revenue}</Typography>
-        <Typography>Revenue in the Past Year: ${yearlyRevenue.revenue}</Typography>
+        <Typography>
+          Revenue in the Past Month: $
+          {monthlyRevenue.revenue ? monthlyRevenue.revenue : 0}
+        </Typography>
+        <Typography>
+          Revenue in the Past Year: $
+          {yearlyRevenue.revenue ? yearlyRevenue.revenue : 0}
+        </Typography>
       </Box>
     </Modal>
   );
