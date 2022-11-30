@@ -3,17 +3,14 @@ import { styles } from "./styles";
 import { useState, useEffect } from "react";
 
 export default function ViewFlights({ open, close }) {
-  useEffect(() => {
-    console.log("ViewFlights mounted");
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <Modal open={open} onClose={close}>
       <Box sx={styles.modal}>
         <Typography variant="h6" component="h2">
-          Text in a modal
+          View Flights
         </Typography>
-        <Typography sx={{ mt: 2 }}>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</Typography>
       </Box>
     </Modal>
   );

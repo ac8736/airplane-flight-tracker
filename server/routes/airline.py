@@ -219,6 +219,6 @@ def get_flight_ratings(flight_number):
     conn = create_connection()
     cursor = conn.cursor()
     query = "SELECT * FROM rate WHERE flight_number=%s"
-    cursor.execute(query, (airline, flight_number))
+    cursor.execute(query, (flight_number))
     data = cursor.fetchall()
     return jsonify({'flight_ratings': data}), 200

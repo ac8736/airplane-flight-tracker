@@ -22,8 +22,6 @@ export const styles = {
   rating: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
     border: "1px solid black",
     p: 0.5,
   },

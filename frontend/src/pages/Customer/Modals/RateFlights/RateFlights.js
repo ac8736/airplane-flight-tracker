@@ -55,6 +55,9 @@ export default function RateFlight({ open, close }) {
       if (response.status === 200) {
         alert("Rating submitted.");
         close();
+        setComment("");
+        setStar("");
+        setFlightNum("");
       } else {
         alert("Error submitting rating.");
       }

@@ -135,6 +135,9 @@ def rate_flights():
     conn = create_connection()
     cursor = conn.cursor()
     rating = request.json
-    query = "INSERT INTO rating VALUES(%s, %s, %s, %s)"
-    cursor.execute(query, (auth["email"], rating["flightNumber"], rating["star"], rating["comment"]))
+    query = "INSERT INTO rate VALUES(%s, %s, %s, %s)"
+    cursor.execute(query, (auth["email"], rating["flightNum"], rating["star"], rating["comment"]))
+    conn.commit()
+    cursor.close()
+    conn.close()
     return jsonify({'status': 'Successful.'}), 200
