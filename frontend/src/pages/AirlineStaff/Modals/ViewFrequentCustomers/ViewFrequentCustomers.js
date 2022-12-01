@@ -1,5 +1,12 @@
 import { styles } from "./styles";
-import { Modal, Box, Typography, Select, MenuItem, FormHelperText } from "@mui/material";
+import {
+  Modal,
+  Box,
+  Typography,
+  Select,
+  MenuItem,
+  FormHelperText,
+} from "@mui/material";
 import { useState, useEffect } from "react";
 
 export default function ViewFrequentCustomers({ open, close }) {
@@ -36,13 +43,16 @@ export default function ViewFrequentCustomers({ open, close }) {
     async function getCustomerFlights() {
       if (selectedCustomer === "") return;
       try {
-        const response = await fetch(`http://127.0.0.1:5000/customer-flights/${selectedCustomer}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-          },
-        });
+        const response = await fetch(
+          `http://127.0.0.1:5000/customer-flights/${selectedCustomer}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            },
+          }
+        );
         const data = await response.json();
         setSelectedCustomerFlights(data.customer_flights);
       } catch (error) {
@@ -59,7 +69,10 @@ export default function ViewFrequentCustomers({ open, close }) {
         <Typography variant="h6" component="h2">
           View Frequent Customers
         </Typography>
-        <Typography>Most Frequent Customer in the Past Year: {mostFrequent}</Typography>
+        <Typography>
+          Most Frequent Customer in the Past Year:{" "}
+          {mostFrequent ? mostFrequent : "No customers yet."}
+        </Typography>
         <FormHelperText>Select a customer to view.</FormHelperText>
         <Select
           value={selectedCustomer}
@@ -68,14 +81,19 @@ export default function ViewFrequentCustomers({ open, close }) {
           sx={styles.selectBox}
         >
           {customers.map((customer) => (
-            <MenuItem key={customer.customer_email} value={customer.customer_email}>
+            <MenuItem
+              key={customer.customer_email}
+              value={customer.customer_email}
+            >
               {customer.customer_email}
             </MenuItem>
           ))}
         </Select>
         {selectedCustomer && (
           <Box>
-            <Typography margin="1em 0">Selected Customer: {selectedCustomer}</Typography>
+            <Typography margin="1em 0">
+              Selected Customer: {selectedCustomer}
+            </Typography>
             <Box sx={styles.previousFlightsContainer}>
               {selectedCustomerFlights.map((flight, index) => (
                 <Box key={index} sx={styles.flightContainer}>

@@ -234,3 +234,19 @@ def get_flight_customers(flight_number):
     cursor.execute(query, (flight_number))
     data = cursor.fetchall()
     return jsonify({'flight_customers': data}), 200
+
+
+@airline.route("/get-tickets-by-airline", methods=["GET"])
+def get_tickets():
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': 'No token or incorrect token.'}), 403
+    conn = create_connection()
+    cursor = conn.cursor()
+    query = "SELECT airline FROM airline_staff WHERE username=%s"
+    cursor.execute(query, (auth["username"]))
+    airline = cursor.fetchone()['airline']
+    query = "SELECT * FROM ticket WHERE airline_name=%s"
+    cursor.execute(query, (airline))
+    data = cursor.fetchall()
+    return jsonify({'tickets': data}), 200
+    
