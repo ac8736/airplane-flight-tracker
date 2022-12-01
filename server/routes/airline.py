@@ -222,3 +222,15 @@ def get_flight_ratings(flight_number):
     cursor.execute(query, (flight_number))
     data = cursor.fetchall()
     return jsonify({'flight_ratings': data}), 200
+
+
+@airline.route("/get-flight-customers/<flight_number>", methods=["GET"])
+def get_flight_customers(flight_number):
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': 'No token or incorrect token.'}), 403
+    conn = create_connection()
+    cursor = conn.cursor()
+    query = "SELECT * FROM ticket WHERE flight_number=%s"
+    cursor.execute(query, (flight_number))
+    data = cursor.fetchall()
+    return jsonify({'flight_customers': data}), 200

@@ -65,8 +65,8 @@ export default function AddAirplane({ open, close }) {
             Confirmed! <br /> Below are your airline's airplanes.
           </Typography>
           <Box sx={styles.airplaneDisplay}>
-            {airplanesByAirline.map((airplane) => (
-              <Box key={airplane.id} sx={styles.airplanes}>
+            {airplanesByAirline.map((airplane, index) => (
+              <Box key={index} sx={styles.airplanes}>
                 <Typography>Airplane ID: {airplane.ID}</Typography>
                 <Typography>Number of Seats: {airplane.num_of_seats}</Typography>
                 <Typography>Manufacturer: {airplane.manufacturing_company}</Typography>

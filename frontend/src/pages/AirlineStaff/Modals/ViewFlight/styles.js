@@ -11,4 +11,17 @@ export const styles = {
     p: 4,
     textAlign: "center",
   },
+  flightsContainers: {
+    height: "50vh",
+    overflow: "auto",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1em",
+    p: 1,
+  },
+  filter: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "1em",
+  },
 };
