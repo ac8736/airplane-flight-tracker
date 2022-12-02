@@ -17,22 +17,35 @@ import { useState, useEffect } from "react";
 
 export default function ViewReports({ open, close }) {
   const [year, setYear] = useState(new Date().getFullYear());
-  const [inputYr, setInputYr] = useState("");
+  const cleanData = [
+    { time: `Jan`, ticketsSold: 0 },
+    { time: `Feb`, ticketsSold: 0 },
+    { time: `Mar`, ticketsSold: 0 },
+    { time: `Apr`, ticketsSold: 0 },
+    { time: `May`, ticketsSold: 0 },
+    { time: `Jun`, ticketsSold: 0 },
+    { time: `Jul`, ticketsSold: 0 },
+    { time: `Aug`, ticketsSold: 0 },
+    { time: `Sep`, ticketsSold: 0 },
+    { time: `Oct`, ticketsSold: 0 },
+    { time: `Nov`, ticketsSold: 0 },
+    { time: `Dec`, ticketsSold: 0 },
+  ];
+
   const [tickets, setTickets] = useState([]);
+
+  const [rows, setRows] = useState(cleanData);
 
   useEffect(() => {
     async function getTickets() {
       try {
-        const response = await fetch(
-          "http://127.0.0.1:5000/get-tickets-by-airline",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-            },
-          }
-        );
+        const response = await fetch("http://127.0.0.1:5000/get-tickets-by-airline", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        });
         const data = await response.json();
         if (response.status === 200) {
           setTickets(data.tickets);
@@ -45,29 +58,15 @@ export default function ViewReports({ open, close }) {
     getTickets();
   }, []);
 
-  const rows = [
-    { time: `Jan ${year}`, ticketsSold: 0 },
-    { time: `Feb ${year}`, ticketsSold: 0 },
-    { time: `Mar ${year}`, ticketsSold: 0 },
-    { time: `Apr ${year}`, ticketsSold: 0 },
-    { time: `May ${year}`, ticketsSold: 0 },
-    { time: `Jun ${year}`, ticketsSold: 0 },
-    { time: `Jul ${year}`, ticketsSold: 0 },
-    { time: `Aug ${year}`, ticketsSold: 0 },
-    { time: `Sep ${year}`, ticketsSold: 0 },
-    { time: `Oct ${year}`, ticketsSold: 0 },
-    { time: `Nov ${year}`, ticketsSold: 0 },
-    { time: `Dec ${year}`, ticketsSold: 0 },
-  ];
-
   function search() {
-    setYear(inputYr);
+    const newRows = JSON.parse(JSON.stringify(cleanData));
     tickets.forEach((ticket) => {
       const ticketDate = new Date(ticket.purchase_date_and_time);
-      if (ticketDate.getFullYear() === year) {
-        rows[ticketDate.getMonth()].ticketsSold += 1;
+      if (ticketDate.getFullYear() === parseInt(year)) {
+        newRows[ticketDate.getMonth()].ticketsSold += 1;
       }
     });
+    setRows(newRows);
   }
 
   return (
@@ -76,12 +75,7 @@ export default function ViewReports({ open, close }) {
         <Typography variant="h6" component="h2">
           View Reports
         </Typography>
-        <Input
-          placeholder="Type the Year to View"
-          value={inputYr}
-          onChange={(e) => setInputYr(e.target.value)}
-          type="number"
-        />
+        <Input placeholder="Type the Year to View" value={year} onChange={(e) => setYear(e.target.value)} type="number" />
         <Button onClick={search}>Search</Button>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -92,11 +86,8 @@ export default function ViewReports({ open, close }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.name}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
+              {rows.map((row, index) => (
+                <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell component="th" scope="row">
                     {row.time}
                   </TableCell>

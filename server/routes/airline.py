@@ -6,10 +6,68 @@ from config import SECRET_KEY
 
 airline = Blueprint('airline', __name__)
 
+
+@airline.route('/airline-email', methods=['GET'])
+def airline_email():
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 409
+    conn = create_connection()
+    cursor = conn.cursor()
+    query = "SELECT * FROM airline_staff_email WHERE username=%s"
+    cursor.execute(query, (auth["username"]))
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    print(result)
+    return jsonify({'emails': result}), 200
+
+
+@airline.route('/add-email', methods=['POST'])
+def add_email():
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 409
+    conn = create_connection()
+    cursor = conn.cursor()
+    query = "INSERT INTO airline_staff_email (username, email) VALUES (%s, %s)"
+    cursor.execute(query, (auth["username"], request.json['email']))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'Success': "Email added."}), 200
+
+
+@airline.route('/add-phone', methods=["POST"])
+def add_phone():
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 409
+    conn = create_connection()
+    cursor = conn.cursor()
+    query = "INSERT INTO airline_staff_number (username, phone_number) VALUES (%s, %s)"
+    cursor.execute(query, (auth["username"], request.json['phone']))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'Success': "Phone number added."}), 200
+
+
+@airline.route('/airline-phone', methods=['GET'])
+def airline_phone():
+    auth = check_authorization()
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 409
+    conn = create_connection()
+    cursor = conn.cursor()
+    query = "SELECT * FROM airline_staff_number WHERE username=%s"
+    cursor.execute(query, (auth["username"]))
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify({'phones': result}), 200
+
+
 @airline.route("/flights-by-airline", methods=['GET'])
 def flights_by_airline():
     auth = check_authorization()
-    if auth == "Error": return jsonify({'Error': "No token or incorrect token."})
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 409
     conn = create_connection()
     cursor = conn.cursor()
     query = "SELECT * FROM airline_staff WHERE username=%s"
@@ -27,7 +85,7 @@ def flights_by_airline():
 @airline.route("/change-flight-status", methods=['POST'])
 def change_flight_status():
     auth = check_authorization()
-    if auth == "Error": return jsonify({'Error': "No token or incorrect token."})
+    if auth == "Error": return jsonify({'Error': "No token or incorrect token."}), 409
     conn = create_connection()
     cursor = conn.cursor()
     query = "UPDATE flight SET flight_status=%s WHERE flight_number=%s"
@@ -194,6 +252,8 @@ def get_customer_reports():
     query = "SELECT DISTINCT customer_email FROM ticket WHERE airline_name=%s"
     cursor.execute(query, (airline))
     customers_by_airline = cursor.fetchall()
+    cursor.close()
+    conn.close()
     return jsonify({'most_frequent_customer': most_frequent_customer, 'customers_by_airline': customers_by_airline}), 200
 
 
@@ -209,6 +269,8 @@ def customer_flights(customer):
     query = "SELECT * FROM ticket NATURAL JOIN flight WHERE customer_email=%s AND airline_name=%s"
     cursor.execute(query, (customer, airline))
     data = cursor.fetchall()
+    cursor.close()
+    conn.close()
     return jsonify({'customer_flights': data}), 200
 
 
@@ -221,6 +283,8 @@ def get_flight_ratings(flight_number):
     query = "SELECT * FROM rate WHERE flight_number=%s"
     cursor.execute(query, (flight_number))
     data = cursor.fetchall()
+    cursor.close()
+    conn.close()
     return jsonify({'flight_ratings': data}), 200
 
 
@@ -233,6 +297,8 @@ def get_flight_customers(flight_number):
     query = "SELECT * FROM ticket WHERE flight_number=%s"
     cursor.execute(query, (flight_number))
     data = cursor.fetchall()
+    cursor.close()
+    conn.close()
     return jsonify({'flight_customers': data}), 200
 
 
@@ -248,5 +314,6 @@ def get_tickets():
     query = "SELECT * FROM ticket WHERE airline_name=%s"
     cursor.execute(query, (airline))
     data = cursor.fetchall()
+    cursor.close()
+    conn.close()
     return jsonify({'tickets': data}), 200
-    

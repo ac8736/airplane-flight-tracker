@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { Typography, Box, Button } from "@mui/material";
 import ViewFlights from "./Modals/ViewFlight/ViewFlights";
+import EmailPhone from "./Modals/EmailPhone/EmailPhone";
 
 const CreateFlight = lazy(() => import("./Modals/CreateFlight/CreateFlight"));
 const ChangeFlightStatus = lazy(() => import("./Modals/ChangeFlightStatus/ChangeFlightStatus"));
@@ -26,6 +27,7 @@ export default function AirlineStaff() {
   const [viewReportsOpen, setViewReportsOpen] = useState(false);
   const [viewRevenueOpen, setViewRevenueOpen] = useState(false);
   const [addAirportOpen, setAddAirportOpen] = useState(false);
+  const [emailPhoneOpen, setEmailPhoneOpen] = useState(false);
 
   const [flights, setFlights] = useState([]);
   const [planeIds, setPlaneIds] = useState([]);
@@ -100,9 +102,18 @@ export default function AirlineStaff() {
       <ViewReports open={viewReportsOpen} close={() => setViewReportsOpen(false)} />
       <ViewRevenue open={viewRevenueOpen} close={() => setViewRevenueOpen(false)} />
       <AddAirport open={addAirportOpen} close={() => setAddAirportOpen(false)} />
+      <EmailPhone open={emailPhoneOpen} close={() => setEmailPhoneOpen(false)} />
       <Box sx={styles.textContainer}>
         <Typography variant="h1" fontSize="3rem">
-          Welcome, {airlineStaff.username}
+          Welcome,
+        </Typography>
+        <Typography
+          variant="h1"
+          fontSize="3rem"
+          onClick={() => setEmailPhoneOpen(true)}
+          sx={{ textDecoration: "underline", "&:hover": { cursor: "pointer" } }}
+        >
+          {airlineStaff.username}
         </Typography>
         <Typography fontSize="1rem">Select an option from the menu to below.</Typography>
       </Box>
