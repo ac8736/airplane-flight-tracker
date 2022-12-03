@@ -27,7 +27,7 @@ export default function RateFlight({ open, close }) {
     }
 
     getFlight();
-  }, []);
+  }, [open]);
 
   async function submitRating(e) {
     e.preventDefault();
