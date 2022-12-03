@@ -60,7 +60,7 @@ CREATE TABLE flight(
 CREATE TABLE ticket(
     ID 		int NOT NULL AUTO_INCREMENT,
     customer_email varchar(30) NOT NULL,
-    airline_name varchar(10) NOT NULL,
+    airline_name varchar(100) NOT NULL,
     flight_number int NOT NULL,
     purchase_date_and_time Datetime NOT NULL,
     PRIMARY KEY (ID),
@@ -106,13 +106,13 @@ CREATE TABLE airline_staff(
 CREATE TABLE airline_staff_email(
     username varchar(20) NOT NULL,
     email varchar(30) NOT NULL,
-    PRIMARY KEY(email),
+    CONSTRAINT PRIMARY KEY (username, email),
     FOREIGN KEY (username) REFERENCES airline_staff(username)
 );
     
 CREATE TABLE airline_staff_number(
   	username varchar(20) NOT NULL,
     phone_number char(10) NOT NULL,
-    PRIMARY KEY (phone_number),
+    CONSTRAINT PRIMARY KEY (username, phone_number),
     FOREIGN KEY (username) REFERENCES airline_staff(username)
 );

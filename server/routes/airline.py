@@ -18,7 +18,6 @@ def airline_email():
     result = cursor.fetchall()
     cursor.close()
     conn.close()
-    print(result)
     return jsonify({'emails': result}), 200
 
 

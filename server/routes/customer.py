@@ -72,9 +72,12 @@ def purchase_ticket():
     flight = cursor.fetchone()
     query = "INSERT INTO ticket(customer_email, airline_name, flight_number, purchase_date_and_time) VALUES(%s, %s, %s, %s)"
     cursor.execute(query, (auth["email"], flight["airline"], flight["flight_number"], payment["purchaseDate"]))
+    conn.commit()
     query = "SELECT ID FROM ticket WHERE customer_email=%s AND airline_name=%s AND flight_number=%s AND purchase_date_and_time=%s"
+    print(query % (auth["email"], flight["airline"], flight["flight_number"], payment["purchaseDate"]))
     cursor.execute(query, (auth["email"], flight["airline"], flight["flight_number"], payment["purchaseDate"]))
     ticket_id = cursor.fetchone()
+    print(ticket_id)
     query = "INSERT INTO purchase VALUES(%s,%s,%s,%s,%s,%s,%s,%s)"
     cursor.execute(query, (auth["email"], ticket_id["ID"], payment["cardNumber"], 
                            payment["cardType"], payment["cardName"], payment["cardExpiration"], 

@@ -68,11 +68,12 @@ export default function AddAirplane({ open, close }) {
             {airplanesByAirline.map((airplane, index) => (
               <Box key={index} sx={styles.airplanes}>
                 <Typography>Airplane ID: {airplane.ID}</Typography>
-                <Typography>Number of Seats: {airplane.num_of_seats}</Typography>
+                <Typography>Number of Seats: {airplane.number_of_seats}</Typography>
                 <Typography>Manufacturer: {airplane.manufacturing_company}</Typography>
                 <Typography>Age: {airplane.age}</Typography>
               </Box>
             ))}
+            <Button onClick={() => setSuccess(false)}>Add More</Button>
           </Box>
         </Box>
       ) : (
