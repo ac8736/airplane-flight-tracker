@@ -1,6 +1,9 @@
 # Andy Chen (ac8736)
 # Justin Xiong (jx1279)
 
+CREATE DATABASE airline_ticket_reservation;
+USE airline_ticket_reservation;
+
 CREATE TABLE customer(
 	email	 varchar(30) NOT NULL,
     name 	 varchar(20) NOT NULL,
