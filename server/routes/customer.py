@@ -67,17 +67,20 @@ def purchase_ticket():
     conn = create_connection()
     cursor = conn.cursor()
     payment = request.json
-    query = "SELECT * FROM flight WHERE flight_number=%s"
+    query = "SELECT * FROM flight INNER JOIN airplane ON flight.plane_id=airplane.ID WHERE flight_number=%s"
     cursor.execute(query, (payment["id"]))
     flight = cursor.fetchone()
+    query = "SELECT COUNT(*) as count FROM ticket WHERE flight_number=%s"
+    cursor.execute(query, (payment["id"]))
+    count = cursor.fetchone()
+    if count["count"] >= flight["number_of_seats"]:
+        return jsonify({'status': 'Flight is full.'}), 409
     query = "INSERT INTO ticket(customer_email, airline_name, flight_number, purchase_date_and_time) VALUES(%s, %s, %s, %s)"
     cursor.execute(query, (auth["email"], flight["airline"], flight["flight_number"], payment["purchaseDate"]))
     conn.commit()
     query = "SELECT ID FROM ticket WHERE customer_email=%s AND airline_name=%s AND flight_number=%s AND purchase_date_and_time=%s"
-    print(query % (auth["email"], flight["airline"], flight["flight_number"], payment["purchaseDate"]))
     cursor.execute(query, (auth["email"], flight["airline"], flight["flight_number"], payment["purchaseDate"]))
     ticket_id = cursor.fetchone()
-    print(ticket_id)
     query = "INSERT INTO purchase VALUES(%s,%s,%s,%s,%s,%s,%s,%s)"
     cursor.execute(query, (auth["email"], ticket_id["ID"], payment["cardNumber"], 
                            payment["cardType"], payment["cardName"], payment["cardExpiration"], 
