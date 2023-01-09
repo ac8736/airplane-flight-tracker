@@ -1,5 +1,3 @@
-# Andy Chen (ac8736) & Justin Xiong (jx1279)
-
 # Routes and SQL Commands Used
 
 ### Customer
