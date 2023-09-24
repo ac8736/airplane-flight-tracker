@@ -11,13 +11,9 @@ export default function Home() {
         <p>A convenient place to quickly check flights.</p>
       </div>
       <div className="home-buttons">
-        <div className="home-buttons-card" onClick={() => navigate("/upcoming")}>
-          <h2>Upcoming Flights</h2>
-          <p>Search for any upcoming flights.</p>
-        </div>
-        <div className="home-buttons-card" onClick={() => navigate("/past")}>
-          <h2>Past Flights</h2>
-          <p>Search for any upcoming flights.</p>
+        <div className="home-buttons-card" onClick={() => navigate("/search")}>
+          <h2>Search Flights</h2>
+          <p>Search for any flights.</p>
         </div>
         <div className="home-buttons-card" onClick={() => navigate("/saved")}>
           <h2>Saved Flights</h2>

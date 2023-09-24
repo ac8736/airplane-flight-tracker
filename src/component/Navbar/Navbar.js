@@ -15,11 +15,8 @@ export default function Navbar() {
               Air<span>Stats</span>
             </h1>
           </div>
-          <Link to="/upcoming" className="navbar-link">
-            Upcoming
-          </Link>
-          <Link to="/past" className="navbar-link">
-            Past
+          <Link to="/search" className="navbar-link">
+            Search
           </Link>
           <Link to="/saved" className="navbar-link">
             Saved

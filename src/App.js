@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./component/Navbar/Navbar";
 import Footer from "./component/Footer/Footer";
 import Home from "./pages/Home/Home";
-import Upcoming from "./pages/Upcoming/Upcoming";
+import Search from "./pages/Search/Search";
 // import { lazy, Suspense } from "react";
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/upcoming" element={<Upcoming />} />
+          <Route path="/search" element={<Search />} />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
         <Footer />
