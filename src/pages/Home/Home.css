@@ -1,0 +1,42 @@
+.home {
+  color: white;
+  height: 75.6vh;
+}
+
+.home-title-text {
+  font-size: 1.4rem;
+  width: 35%;
+  margin: auto;
+  margin-top: 4em;
+}
+
+.home-title-text > h1 {
+  text-align: center;
+}
+
+.home-title-text > p {
+  text-align: center;
+  font-weight: 100;
+}
+
+.home-buttons {
+  display: flex;
+  margin: auto;
+  width: 50%;
+  justify-content: space-between;
+  margin-top: 6%;
+}
+
+.home-buttons-card {
+  text-align: center;
+  border: 1px solid white;
+  padding: 1em;
+  border-radius: 15px;
+  width: 27%;
+  background-color: #100c0c;
+}
+
+.home-buttons-card:hover {
+  box-shadow: 0 0 20px 20px rgba(207, 27, 27, 0.1);
+  cursor: pointer;
+}
