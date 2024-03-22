@@ -1,0 +1,12 @@
+C:\Users\chena\Desktop\projects\airplane-flight-tracker\AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.Contracts\bin\Debug\net8.0\AirplaneFlightTrackerApi.Contracts.deps.json
+C:\Users\chena\Desktop\projects\airplane-flight-tracker\AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.Contracts\bin\Debug\net8.0\AirplaneFlightTrackerApi.Contracts.dll
+C:\Users\chena\Desktop\projects\airplane-flight-tracker\AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.Contracts\bin\Debug\net8.0\AirplaneFlightTrackerApi.Contracts.pdb
+C:\Users\chena\Desktop\projects\airplane-flight-tracker\AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.Contracts\obj\Debug\net8.0\AirplaneFlightTrackerApi.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\chena\Desktop\projects\airplane-flight-tracker\AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.Contracts\obj\Debug\net8.0\AirplaneFlightTrackerApi.Contracts.AssemblyInfoInputs.cache
+C:\Users\chena\Desktop\projects\airplane-flight-tracker\AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.Contracts\obj\Debug\net8.0\AirplaneFlightTrackerApi.Contracts.AssemblyInfo.cs
+C:\Users\chena\Desktop\projects\airplane-flight-tracker\AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.Contracts\obj\Debug\net8.0\AirplaneFlightTrackerApi.Contracts.csproj.CoreCompileInputs.cache
+C:\Users\chena\Desktop\projects\airplane-flight-tracker\AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.Contracts\obj\Debug\net8.0\AirplaneFlightTrackerApi.Contracts.sourcelink.json
+C:\Users\chena\Desktop\projects\airplane-flight-tracker\AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.Contracts\obj\Debug\net8.0\AirplaneFlightTrackerApi.Contracts.dll
+C:\Users\chena\Desktop\projects\airplane-flight-tracker\AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.Contracts\obj\Debug\net8.0\refint\AirplaneFlightTrackerApi.Contracts.dll
+C:\Users\chena\Desktop\projects\airplane-flight-tracker\AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.Contracts\obj\Debug\net8.0\AirplaneFlightTrackerApi.Contracts.pdb
+C:\Users\chena\Desktop\projects\airplane-flight-tracker\AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.Contracts\obj\Debug\net8.0\ref\AirplaneFlightTrackerApi.Contracts.dll

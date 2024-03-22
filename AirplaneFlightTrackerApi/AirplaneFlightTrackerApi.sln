@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirplaneFlightTrackerApi.Contracts", "AirplaneFlightTrackerApi.Contracts\AirplaneFlightTrackerApi.Contracts.csproj", "{97388DE9-223A-4DB8-B9F0-A85A3F0D31AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirplaneFlightTrackerApi", "AirplaneFlightTrackerApi\AirplaneFlightTrackerApi.csproj", "{DF57F43E-76B2-4037-92E0-F1D017140F05}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97388DE9-223A-4DB8-B9F0-A85A3F0D31AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97388DE9-223A-4DB8-B9F0-A85A3F0D31AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97388DE9-223A-4DB8-B9F0-A85A3F0D31AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97388DE9-223A-4DB8-B9F0-A85A3F0D31AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF57F43E-76B2-4037-92E0-F1D017140F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF57F43E-76B2-4037-92E0-F1D017140F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF57F43E-76B2-4037-92E0-F1D017140F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF57F43E-76B2-4037-92E0-F1D017140F05}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

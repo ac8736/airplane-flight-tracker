@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "+13bUCPdIw8s/7z6/nVxDJXSVKFGHugj4Dng+QexHkw=",
+  "Source": "AirplaneFlightTrackerApi",
+  "BasePath": "_content/AirplaneFlightTrackerApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
