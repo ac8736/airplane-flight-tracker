@@ -1,9 +1,0 @@
-POST http://localhost:5200/airport/create
-Content-Type: application/json
-
-{
-  "name": "LaGuardia Airport",
-  "code": "LGA",
-  "city": "NYC",
-  "country": "United States of America"
-}

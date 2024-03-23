@@ -27,10 +27,11 @@ CREATE TABLE airline(
 
 CREATE TABLE airport(
 	name varchar(20) NOT NULL,
+    code varchar(3) NOT NULL,
     city varchar(20) NOT NULL,
     country varchar(20) NOT NULL,
-    airport_type varchar(20) NOT NULL,
-    PRIMARY KEY (name)
+    dateCreated Datetime NOT NULL,
+    PRIMARY KEY (code)
 );
 
 CREATE TABLE airplane(
@@ -96,26 +97,14 @@ CREATE TABLE rate(
 );
     
 CREATE TABLE airline_staff(
+    guid varchar(255) NOT NULL
     username	  varchar(20) NOT NULL,
+    email varchar(255) NOT NULL,
     acc_password	varchar(100) NOT NULL,
     firstname	varchar(10) NOT NULL,
     lastname	varchar(10) NOT NULL,
     date_of_birth	Date NOT NULL,
     airline		varchar(20) NOT NULL,
-    PRIMARY KEY (username),
+    PRIMARY KEY (guid),
     FOREIGN KEY (airline) REFERENCES airline(name)
-);
-
-CREATE TABLE airline_staff_email(
-    username varchar(20) NOT NULL,
-    email varchar(30) NOT NULL,
-    CONSTRAINT PRIMARY KEY (username, email),
-    FOREIGN KEY (username) REFERENCES airline_staff(username)
-);
-    
-CREATE TABLE airline_staff_number(
-  	username varchar(20) NOT NULL,
-    phone_number char(10) NOT NULL,
-    CONSTRAINT PRIMARY KEY (username, phone_number),
-    FOREIGN KEY (username) REFERENCES airline_staff(username)
 );
